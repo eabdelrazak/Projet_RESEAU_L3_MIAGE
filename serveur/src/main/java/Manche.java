@@ -23,7 +23,12 @@ public class Manche {
     }
 
     private void determinerJoueurCommancant() {
-
+        if(this.leTableau.enigmeFini() == false){
+            this.leTableau.revelerLettre();
+        }else{
+            this.joueurCourrant = 0;
+            commencerManche();
+        }
     }
 
     public void jouer() {

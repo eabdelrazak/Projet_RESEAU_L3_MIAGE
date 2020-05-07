@@ -56,4 +56,17 @@ public class TableauAffichage {
         }
     }
 
+    //Methode pour savoir si tout les lettres d'une enigme on été révélé
+    public boolean enigmeFini(){
+        boolean fini = true;
+
+        for(int i = 0; i < this.longueurEnigme; i++){
+            if(this.enigmeADeviner[i] != ' '){
+                fini = false;
+            }
+        }
+
+        return fini;
+    }
+
 }
