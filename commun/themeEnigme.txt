@@ -1,0 +1,11 @@
+geo;FRANCE
+geo;JAPON
+geo;ANGLETERRE
+animal;GIRAFE
+animal;SINGE
+animal;CHIEN
+animal;SOURIS
+aliment;PAPAYE
+aliment;BANANE
+aliment;CERISE
+
