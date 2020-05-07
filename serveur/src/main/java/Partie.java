@@ -16,9 +16,9 @@ public class Partie {
     }
 
     public void commencer(){
-        Manche manche = new Manche(1, this.listeJoueur);
+        Manche manche = new Manche(1, this.listeJoueur, leTableau);
         this.laManche = manche;
-        this.laManche.jouer();
+        this.laManche.commencerManche();
     }
 
     public void setRoueDesJoueurs(){
