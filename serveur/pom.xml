@@ -27,7 +27,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>rouefortune.serveur.Serveur
+                    <mainClass>rouefortune.serveur.App
                     </mainClass>
                 </configuration>
             </plugin>
