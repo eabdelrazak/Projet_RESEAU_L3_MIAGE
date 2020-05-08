@@ -48,7 +48,7 @@ public class TableauAffichage {
     public void revelerLettre(){
         boolean lettreReveler = false;
 
-        while(lettreReveler == false){
+        while(!lettreReveler){
             int nombreRandom = rand.nextInt(this.enigmeADeviner.length);
             if(this.enigmeADeviner[nombreRandom] != ' '){
                 this.enigmeDeviner[nombreRandom] = this.enigmeADeviner[nombreRandom];
@@ -63,8 +63,9 @@ public class TableauAffichage {
         boolean fini = true;
 
         for(int i = 0; i < this.longueurEnigme; i++){
-            if(this.enigmeADeviner[i] != ' '){
+            if (this.enigmeADeviner[i] != ' ') {
                 fini = false;
+                break;
             }
         }
 

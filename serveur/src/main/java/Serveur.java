@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Objects;
 
 public class Serveur {
 
@@ -16,18 +17,18 @@ public class Serveur {
     }
 
     public void lireFichierEnigme() throws IOException {
-        InputStreamReader isr = new InputStreamReader(Serveur.class.getClassLoader().getResourceAsStream("themeEnigme.csv"));
+        InputStreamReader isr = new InputStreamReader(Objects.requireNonNull(Serveur.class.getClassLoader().getResourceAsStream("themeEnigme.csv")));
         BufferedReader nbCounter = new BufferedReader(isr);
         int nbMots = 0;
         String str;
 
-        while((str = nbCounter.readLine()) != null) {
+        while(nbCounter.readLine() != null) {
             nbMots++;
         }
         nbCounter.close();
 
         String[][] tab = new String[nbMots][2];
-        isr = new InputStreamReader(Serveur.class.getClassLoader().getResourceAsStream("themeEnigme.csv"));
+        isr = new InputStreamReader(Objects.requireNonNull(Serveur.class.getClassLoader().getResourceAsStream("themeEnigme.csv")));
         BufferedReader br = new BufferedReader(isr);
         nbMots = 0;
         while((str = br.readLine()) != null){

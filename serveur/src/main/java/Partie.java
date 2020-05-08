@@ -16,14 +16,13 @@ public class Partie {
     }
 
     public void commencer(){
-        Manche manche = new Manche(1, this.listeJoueur, leTableau);
-        this.laManche = manche;
+        this.laManche = new Manche(1, this.listeJoueur, leTableau);
         this.laManche.commencerManche();
     }
 
     public void setRoueDesJoueurs(){
-        for(int i = 0; i < this.listeJoueur.length; i++){
-            this.listeJoueur[i].setLaRoue(this.laRoue);
+        for (Joueur joueur : this.listeJoueur) {
+            joueur.setLaRoue(this.laRoue);
         }
     }
 
