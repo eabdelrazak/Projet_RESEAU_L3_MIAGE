@@ -66,6 +66,7 @@ public class Manche {
         }else{
             terminerEnigmeRapide();
             this.joueurDebutant = idJoueur;
+            this.lesJoueurs[idJoueur].addCagnotePartie(500);
         }
     }
 
