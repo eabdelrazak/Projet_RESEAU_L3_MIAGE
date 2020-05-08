@@ -1,5 +1,3 @@
-import java.util.TimerTask;
-
 public class Manche {
 
     private int numeroManche;
@@ -23,7 +21,7 @@ public class Manche {
     }
 
     private void determinerJoueurCommancant() {
-        if(this.leTableau.enigmeFini() == false){
+        if(!this.leTableau.enigmeFini()){
             this.leTableau.revelerLettre(); //a lancer chaque seconde
             //interuption par un joueur qui fait une proposition
             //si proposition = vrai alors il gagne 500€ et devient le joueur courrant
