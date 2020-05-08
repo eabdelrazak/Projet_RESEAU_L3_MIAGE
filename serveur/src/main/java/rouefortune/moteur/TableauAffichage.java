@@ -1,7 +1,12 @@
+package rouefortune.moteur;
+
+import rouefortune.serveur.Partie;
+
 import java.util.Random;
 
 public class TableauAffichage {
 
+    private final Partie partie;
     private String theme;
     private String propositionATrouver;
     private char[] enigmeADeviner;
@@ -9,7 +14,8 @@ public class TableauAffichage {
     private int longueurEnigme = 0;
     private Random rand;
 
-    public TableauAffichage(){
+    public TableauAffichage(Partie partie){
+        this.partie = partie;
         this.rand = new Random();
     }
 

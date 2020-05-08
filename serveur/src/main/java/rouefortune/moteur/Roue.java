@@ -1,3 +1,5 @@
+package rouefortune.moteur;
+
 import java.util.Random;
 
 public class Roue {

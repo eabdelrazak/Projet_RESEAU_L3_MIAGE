@@ -27,7 +27,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>Serveur
+                    <mainClass>rouefortune.serveur.Serveur
                     </mainClass>
                 </configuration>
             </plugin>

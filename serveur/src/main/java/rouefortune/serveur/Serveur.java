@@ -1,3 +1,5 @@
+package rouefortune.serveur;
+
 import java.io.*;
 import java.util.Objects;
 
