@@ -6,7 +6,7 @@ public class Manche {
     private Joueur[] lesJoueurs;
     public int joueurCourrant;
     private TableauAffichage leTableau;
-    public static int interuptionIdJoueur;
+    public int interuptionIdJoueur;
 
     public Manche(int i, Joueur[] listeJoueur,TableauAffichage tableau) {
         this.numeroManche = i;
@@ -31,7 +31,7 @@ public class Manche {
                 determinerJoueurCommancant(); //a lancer chaque x seconde
             }else{//interuption par un joueur qui fait une proposition
                 //si proposition = vrai alors il gagne 500€ et devient le joueur courrant
-                if(this.leTableau.comparerProposition(this.lesJoueurs[this.interuptionIdJoueur].getProposition()) == true){
+                if(this.leTableau.comparerProposition(this.lesJoueurs[this.interuptionIdJoueur].getProposition())){
                     this.lesJoueurs[this.interuptionIdJoueur].addCagnotePartie(500);
                     this.joueurCourrant = this.interuptionIdJoueur;
                 }else{
