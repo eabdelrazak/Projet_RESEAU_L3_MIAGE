@@ -4,7 +4,7 @@ public class Manche {
 
     private int numeroManche;
     private Joueur[] lesJoueurs;
-    public int joueurCourrant;
+    public int joueurDebutant;
     private TableauAffichage leTableau;
     public static int interuptionIdJoueur;
 
@@ -12,12 +12,12 @@ public class Manche {
         this.numeroManche = i;
         this.lesJoueurs = listeJoueur;
         this.leTableau = tableau;
-        this.joueurCourrant = -1;
+        this.joueurDebutant = -1;
         this.interuptionIdJoueur = -1;
     }
 
     public void commencerManche(){
-        if(this.joueurCourrant == -1){
+        if(this.joueurDebutant == -1){
             determinerJoueurCommancant();
         }else{
             jouer();
@@ -33,20 +33,23 @@ public class Manche {
                 //si proposition = vrai alors il gagne 500€ et devient le joueur courrant
                 if(this.leTableau.comparerProposition(this.lesJoueurs[this.interuptionIdJoueur].getProposition()) == true){
                     this.lesJoueurs[this.interuptionIdJoueur].addCagnotePartie(500);
-                    this.joueurCourrant = this.interuptionIdJoueur;
+                    this.joueurDebutant = this.interuptionIdJoueur;
                 }else{
                     this.interuptionIdJoueur = -1;
                     determinerJoueurCommancant();
                 }
             }
         }else{//personne n'a trouver l'enigme le joueur 0 devient le 1er a jouer par defaut
-            this.joueurCourrant = 0;
+            this.joueurDebutant = 0;
             commencerManche();
         }
     }
 
     public void jouer() {
-        for(int i = 0; i < this.lesJoueurs.length; i++){
+        for(int i = this.joueurDebutant; i < this.lesJoueurs.length; i++){
+            tournerRoue(i);
+        }
+        for (int i = 0; i < this.joueurDebutant; i++){
             tournerRoue(i);
         }
     }
