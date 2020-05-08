@@ -58,6 +58,9 @@ public class Manche {
         this.enigmeRapide.stop();
     }
 
+    /**
+     * Permet a un joueur de faire une proposition a l'enigme rapide
+     */
     public void faireUneProposition(int idJoueur, String proposition){
         this.pauseEnigmeRapide();
         boolean resultatProposition = this.enigmeRapide.faireProposition(proposition);
@@ -71,12 +74,12 @@ public class Manche {
     }
 
     public void jouer() {
-        for(int i = this.joueurDebutant; i < this.lesJoueurs.length; i++){
+        /*for(int i = this.joueurDebutant; i < this.lesJoueurs.length; i++){
             tournerRoue(i);
         }
         for (int i = 0; i < this.joueurDebutant; i++){
             tournerRoue(i);
-        }
+        }*/
     }
 
     public void tournerRoue(int i){
