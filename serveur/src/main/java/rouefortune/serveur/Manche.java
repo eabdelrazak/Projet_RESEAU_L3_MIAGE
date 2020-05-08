@@ -11,7 +11,6 @@ public class Manche {
     private Inventaire[] lesJoueurs;
     public int joueurDebutant;
     private TableauAffichage leTableau;
-    public int interuptionIdJoueur;
     private EnigmeRapide enigmeRapide;
 
 
@@ -20,7 +19,6 @@ public class Manche {
         this.lesJoueurs = listeJoueur;
         this.leTableau = tableau;
         this.joueurDebutant = -1;
-        this.interuptionIdJoueur = -1;
     }
 
     public void commencerManche(){
@@ -47,28 +45,27 @@ public class Manche {
     }
 
     /**
+     * Remets en route la révélation des lettres  de l'enigme rapide.
+     */
+    private void repriseEnigmeRapide() {
+        this.enigmeRapide.resume();
+    }
+
+    /**
      * Termine l'enigme rapide.
      */
     private void terminerEnigmeRapide() {
         this.enigmeRapide.stop();
     }
 
-    private void determinerJoueurCommancant() {
-        if(!this.leTableau.enigmeFini()){
-            if(this.interuptionIdJoueur == -1){
-            }else{//interuption par un joueur qui fait une proposition
-                //si proposition = vrai alors il gagne 500€ et devient le joueur courrant
-                /*if(this.leTableau.comparerProposition(this.lesJoueurs[this.interuptionIdJoueur].getProposition())){
-                    this.lesJoueurs[this.interuptionIdJoueur].addCagnotePartie(500);
-                    this.joueurDebutant = this.interuptionIdJoueur;
-                }else{
-                    this.interuptionIdJoueur = -1;
-                    determinerJoueurCommancant();
-                }*/
-            }
-        }else{//personne n'a trouver l'enigme le joueur 0 devient le 1er a jouer par defaut
-            this.joueurDebutant = 0;
-            commencerManche();
+    public void faireUneProposition(int idJoueur, String proposition){
+        this.pauseEnigmeRapide();
+        boolean resultatProposition = this.enigmeRapide.faireProposition(proposition);
+        if(resultatProposition == false){
+            repriseEnigmeRapide();
+        }else{
+            terminerEnigmeRapide();
+            this.joueurDebutant = idJoueur;
         }
     }
 

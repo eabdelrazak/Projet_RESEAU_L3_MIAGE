@@ -85,4 +85,8 @@ public class EnigmeRapide extends Enigme implements Runnable {
     private void start() {
         this.threadLettre.start();
     }
+
+    public boolean faireProposition(String proposition){
+        return this.leTableau.comparerProposition(proposition);
+    }
 }
