@@ -1,4 +1,5 @@
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class Manche {
 
@@ -7,6 +8,7 @@ public class Manche {
     public int joueurDebutant;
     private TableauAffichage leTableau;
     public int interuptionIdJoueur;
+
 
     public Manche(int i, Joueur[] listeJoueur,TableauAffichage tableau) {
         this.numeroManche = i;
@@ -28,6 +30,11 @@ public class Manche {
         if(!this.leTableau.enigmeFini()){
             if(this.interuptionIdJoueur == -1){
                 this.leTableau.revelerLettre();
+                try {
+                    TimeUnit.SECONDS.sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 determinerJoueurCommancant(); //a lancer chaque x seconde
             }else{//interuption par un joueur qui fait une proposition
                 //si proposition = vrai alors il gagne 500€ et devient le joueur courrant

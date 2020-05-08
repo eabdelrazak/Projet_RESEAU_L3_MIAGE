@@ -25,13 +25,6 @@ public class Joueur {
         return proposition;
     }
 
-    public void interompreRevelationTableau(){
-        /**A Faire: Demande au joueur d'ecrire sa proposition et la place dans l'attribut proposition**/
-        String chaineSaisie = "";
-        this.proposition = chaineSaisie.toUpperCase();
-        Manche.interuptionIdJoueur = this.numeroJoueur;
-    }
-
     public void addCagnotePartie(int somme){
         this.cagnotePartie += somme;
     }

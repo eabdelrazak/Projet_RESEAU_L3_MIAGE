@@ -30,7 +30,7 @@ public class TableauAffichage {
         }
     }
 
-    //Methode pour savoir combiend fois une lettre est presente dans l'énigme a deviné
+    //Methode pour savoir combiens de fois une lettre est presente dans l'énigme a deviné
     public int chercherLettre(char lettre){
         lettre = Character.toUpperCase(lettre);
         int nombreTrouver = 0;
