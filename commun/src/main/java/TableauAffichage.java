@@ -3,6 +3,7 @@ import java.util.Random;
 public class TableauAffichage {
 
     private String theme;
+    private String propositionATrouver;
     private char[] enigmeADeviner;
     private char[] enigmeDeviner;
     private int longueurEnigme = 0;
@@ -15,6 +16,7 @@ public class TableauAffichage {
     //Methode pour definir l'énigme qui apparais sur le tableau
     public void setEnigmeADeviner(String themeP, String phrase){
         this.theme = themeP;
+        this.propositionATrouver = phrase;
         this.longueurEnigme = phrase.length();
         this.enigmeADeviner = new char[longueurEnigme];
         this.enigmeDeviner = new char[longueurEnigme];
@@ -68,6 +70,14 @@ public class TableauAffichage {
         }
 
         return fini;
+    }
+
+    public boolean comparerProposition(String propositionP){
+        if(this.propositionATrouver.equals(propositionP)){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 }
