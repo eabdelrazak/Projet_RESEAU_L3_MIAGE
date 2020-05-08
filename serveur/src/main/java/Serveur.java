@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class Serveur {
 
@@ -10,15 +8,16 @@ public class Serveur {
 
         Serveur serveur = new Serveur();
         try {
-            serveur.tabEnigmes = Serveur.lireFichierEnigme();
+            serveur.lireFichierEnigme();
+            System.out.println(serveur.tabEnigmes[0][1]);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static String[][] lireFichierEnigme() throws IOException {
-        FileReader fr = new FileReader("themeEnigme.csv");
-        BufferedReader nbCounter = new BufferedReader(fr);
+    public void lireFichierEnigme() throws IOException {
+        InputStreamReader isr = new InputStreamReader(Serveur.class.getClassLoader().getResourceAsStream("themeEnigme.csv"));
+        BufferedReader nbCounter = new BufferedReader(isr);
         int nbMots = 0;
         String str;
 
@@ -28,8 +27,8 @@ public class Serveur {
         nbCounter.close();
 
         String[][] tab = new String[nbMots][2];
-
-        BufferedReader br = new BufferedReader(fr);
+        isr = new InputStreamReader(Serveur.class.getClassLoader().getResourceAsStream("themeEnigme.csv"));
+        BufferedReader br = new BufferedReader(isr);
         nbMots = 0;
         while((str = br.readLine()) != null){
             tab[nbMots] = str.split(";");
@@ -37,6 +36,6 @@ public class Serveur {
         }
         br.close();
 
-        return tab;
+        this.tabEnigmes = tab;
     }
 }
