@@ -4,6 +4,7 @@ import rouefortune.moteur.EnigmeRapide;
 import rouefortune.moteur.TableauAffichage;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -13,7 +14,7 @@ public class Manche {
     private int numeroManche;
     /*private Inventaire[] lesJoueurs;*/
     private ArrayList<ClientHandler> clientHandlers;
-    public int joueurDebutant;
+    public Socket joueurDebutant;
     private TableauAffichage leTableau;
     private EnigmeRapide enigmeRapide;
     private Random rand;
@@ -23,7 +24,7 @@ public class Manche {
         this.numeroManche = i;
         this.clientHandlers = clientHandlers;
         this.leTableau = tableau;
-        this.joueurDebutant = -1;
+        this.joueurDebutant = null;
         this.rand = new Random();
     }
 
@@ -70,17 +71,17 @@ public class Manche {
     /**
      * Permet a un joueur de faire une proposition a l'enigme rapide
      */
-    /*public void faireUneProposition(int idJoueur, String proposition){
+    public void faireUnePropositionEnigmeRapide(ClientHandler client, String proposition){
         this.pauseEnigmeRapide();
         boolean resultatProposition = this.enigmeRapide.faireProposition(proposition);
         if(resultatProposition == false){
             repriseEnigmeRapide();
         }else{
             terminerEnigmeRapide();
-            this.joueurDebutant = idJoueur;
-            this.lesJoueurs[idJoueur].addCagnotePartie(500);
+            this.joueurDebutant = client.s;
+            client.getInventaire().addCagnotePartie(500);
         }
-    }*/
+    }
 
     public void jouerEnigmeLongue() {
         /*for(int i = this.joueurDebutant; i < this.lesJoueurs.length; i++){
