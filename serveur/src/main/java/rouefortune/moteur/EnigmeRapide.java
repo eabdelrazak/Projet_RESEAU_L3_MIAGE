@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import rouefortune.MessageJoueur;
 import rouefortune.serveur.ClientHandler;
+import rouefortune.serveur.Serveur;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,14 +14,14 @@ import java.util.concurrent.TimeUnit;
 public class EnigmeRapide extends Enigme implements Runnable {
     private volatile boolean running = true;
     private volatile boolean paused = true;
-    private ArrayList<ClientHandler> clientHandlers;
+    private Serveur serveur;
     private final Object pauseLock = new Object();
 
     public Thread threadLettre;
 
-    public EnigmeRapide(TableauAffichage tableau, ArrayList<ClientHandler> clientHandlers) {
+    public EnigmeRapide(TableauAffichage tableau, Serveur serveur) {
         super(tableau);
-        this.clientHandlers = clientHandlers;
+        this.serveur = serveur;
         this.threadLettre = new Thread(this);
         this.start();
     }
@@ -30,6 +31,7 @@ public class EnigmeRapide extends Enigme implements Runnable {
      */
     private void revelerLettre() {
         this.leTableau.revelerLettre();
+        this.serveur.envoyerEnigme(this.leTableau);
     }
 
     /**
@@ -61,16 +63,6 @@ public class EnigmeRapide extends Enigme implements Runnable {
                 e.printStackTrace();
             }
             this.revelerLettre();
-            for (ClientHandler client : clientHandlers) {
-                try {
-                    System.out.println(this.leTableau.AfficherEnigmeDeviner());
-                    //String message = creerMessageJsonObject("Enigme rapide", this.leTableau.AfficherEnigmeDeviner());
-                    //client.getDos().writeUTF(this.leTableau.AfficherEnigmeDeviner());
-                    client.getDos().writeUTF(this.leTableau.AfficherEnigmeDeviner());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
