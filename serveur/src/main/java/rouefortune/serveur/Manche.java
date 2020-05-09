@@ -3,20 +3,23 @@ package rouefortune.serveur;
 import rouefortune.moteur.EnigmeRapide;
 import rouefortune.moteur.TableauAffichage;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class Manche {
 
     private int numeroManche;
-    private Inventaire[] lesJoueurs;
+    /*private Inventaire[] lesJoueurs;*/
+    private ArrayList<ClientHandler> clientHandlers;
     public int joueurDebutant;
     private TableauAffichage leTableau;
     private EnigmeRapide enigmeRapide;
 
 
-    public Manche(int i, Inventaire[] listeJoueur, TableauAffichage tableau) {
+    public Manche(int i, ArrayList<ClientHandler> clientHandlers, TableauAffichage tableau) {
         this.numeroManche = i;
-        this.lesJoueurs = listeJoueur;
+        this.clientHandlers = clientHandlers;
         this.leTableau = tableau;
         this.joueurDebutant = -1;
     }
@@ -35,6 +38,13 @@ public class Manche {
     private void jouerEnigmeRapide() {
         this.enigmeRapide = new EnigmeRapide(this.leTableau);
         this.enigmeRapide.resume();
+        /*for(ClientHandler client : clientHandlers) {
+            try {
+                client.dos.writeUTF(this.leTableau.getEnigmeDeviner().toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }*/
     }
 
     /**
@@ -61,7 +71,7 @@ public class Manche {
     /**
      * Permet a un joueur de faire une proposition a l'enigme rapide
      */
-    public void faireUneProposition(int idJoueur, String proposition){
+    /*public void faireUneProposition(int idJoueur, String proposition){
         this.pauseEnigmeRapide();
         boolean resultatProposition = this.enigmeRapide.faireProposition(proposition);
         if(resultatProposition == false){
@@ -71,7 +81,7 @@ public class Manche {
             this.joueurDebutant = idJoueur;
             this.lesJoueurs[idJoueur].addCagnotePartie(500);
         }
-    }
+    }*/
 
     public void jouer() {
         /*for(int i = this.joueurDebutant; i < this.lesJoueurs.length; i++){

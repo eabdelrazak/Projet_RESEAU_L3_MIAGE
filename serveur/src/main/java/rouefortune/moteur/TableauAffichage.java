@@ -86,4 +86,7 @@ public class TableauAffichage {
         }
     }
 
+    public char[] getEnigmeDeviner() {
+        return enigmeDeviner;
+    }
 }

@@ -5,8 +5,7 @@ public class Inventaire {
     private int cagnotePartie;
     private int cagnoteManche;
 
-    public Inventaire(int numP){
-        this.numeroJoueur = numP;
+    public Inventaire(){
         this.cagnotePartie = 0;
         this.cagnoteManche = 0;
     }
@@ -14,7 +13,6 @@ public class Inventaire {
     public void addCagnotePartie(int somme){
         this.cagnotePartie += somme;
     }
-
     public void addCagnoteManche(int somme){
         this.cagnoteManche += somme;
     }
