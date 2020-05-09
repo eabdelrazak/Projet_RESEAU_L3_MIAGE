@@ -48,10 +48,6 @@ public class Client {
             // information between client and client handler
             while (true){
                 this.message = receptionMessage(dis.readUTF());
-                //System.out.println(this.message.getMessage());
-                if(this.message.getMessage().equals(Messages.ENIGME_RAPIDE)){
-                    System.out.println(this.message.getContenu());
-                }
 
                 switch(this.message.getMessage()){
                     case Messages.CONNEXION_REUSSI:
