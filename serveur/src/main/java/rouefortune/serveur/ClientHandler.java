@@ -1,5 +1,11 @@
 package rouefortune.serveur;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import rouefortune.Message;
+
 import java.io.*;
 import java.util.*;
 import java.net.*;
@@ -10,6 +16,7 @@ public class ClientHandler implements Runnable {
     final Socket s;
     private Inventaire inventaire;
     private Serveur serveur;
+    private Message message;
 
     public ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos, Serveur serveurP) {
         this.s = s;
@@ -28,7 +35,6 @@ public class ClientHandler implements Runnable {
         while (true)
         {
             try {
-
                 // receive the answer from client
                 received = dis.readUTF();
 
@@ -67,6 +73,19 @@ public class ClientHandler implements Runnable {
         }catch(IOException e){
             e.printStackTrace();
         }
+    }
+
+    public Message receptionMessage(String str){
+        Message message = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+            message = mapper.readValue(str, Message.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return message;
     }
 
     public DataInputStream getDis() {

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import rouefortune.Message;
+import rouefortune.Messages;
 import rouefortune.moteur.TableauAffichage;
 
 import java.io.*;
@@ -134,7 +135,7 @@ public class Serveur {
         for (ClientHandler client : clientHandlers) {
             try {
                 System.out.println(tableau.AfficherEnigmeDeviner());
-                String message = ""+creerMessageJsonObject("Enigme rapide", tableau.AfficherEnigmeDeviner());
+                String message = creerMessageJsonObject(Messages.ENIGME_RAPIDE, tableau.AfficherEnigmeDeviner());
                 //client.getDos().writeUTF(tableau.AfficherEnigmeDeviner());
                 client.getDos().writeUTF(message);
             } catch (IOException e) {

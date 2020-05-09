@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import rouefortune.Message;
+import rouefortune.Messages;
 
 import java.io.*;
 import java.net.*;
@@ -57,7 +58,7 @@ public class Joueur {
             while (true){
                 this.message = receptionMessage(dis.readUTF());
                 //System.out.println(this.message.getMessage());
-                if(this.message.getMessage().equals("Enigme rapide")){
+                if(this.message.getMessage().equals(Messages.ENIGME_RAPIDE)){
                     System.out.println(this.message.getContenu());
                 }
                 String tosend = "";//scn.nextLine();
