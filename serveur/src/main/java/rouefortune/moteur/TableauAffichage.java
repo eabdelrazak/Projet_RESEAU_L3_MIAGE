@@ -79,11 +79,7 @@ public class TableauAffichage {
     }
 
     public boolean comparerProposition(String propositionP){
-        if(this.propositionATrouver.equals(propositionP)){
-            return true;
-        }else{
-            return false;
-        }
+        return this.propositionATrouver.equals(propositionP);
     }
 
     public char[] getEnigmeDeviner() {
@@ -91,17 +87,17 @@ public class TableauAffichage {
     }
 
     public String AfficherEnigmeDeviner(){
-        String s = "";
-        for(int i = 0; i < enigmeDeviner.length; i++){
-            s+=enigmeDeviner[i];
+        StringBuilder s = new StringBuilder();
+        for (char c : enigmeDeviner) {
+            s.append(c);
         }
-        return s;
+        return s.toString();
     }
 
     public int getNombreCharacterRestant() {
         int nbRestant = 0;
-        for(int i=0; i < this.enigmeADeviner.length; i++){
-            if(this.enigmeADeviner[i] != 0){
+        for (char c : this.enigmeADeviner) {
+            if (c != 0) {
                 nbRestant++;
             }
         }

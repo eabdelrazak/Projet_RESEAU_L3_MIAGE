@@ -3,7 +3,6 @@ package rouefortune.serveur;
 import rouefortune.moteur.EnigmeRapide;
 import rouefortune.moteur.TableauAffichage;
 
-import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
@@ -41,8 +40,8 @@ public class Manche {
      * Commence l'enigme rapide et la révélation des lettres
      */
     private void jouerEnigmeRapide() {
-        int random_un = rand.nextInt(Serveur.tabEnigmes.length);
-        this.leTableau.setEnigmeADeviner(Serveur.tabEnigmes[random_un][0], Serveur.tabEnigmes[random_un][1]);
+        int random_un = rand.nextInt(this.serveur.tabEnigmes.length);
+        this.leTableau.setEnigmeADeviner(this.serveur.tabEnigmes[random_un][0], this.serveur.tabEnigmes[random_un][1]);
         this.enigmeRapide = new EnigmeRapide(this.leTableau, this.serveur);
         this.enigmeRapide.resume();
     }
@@ -74,7 +73,7 @@ public class Manche {
     public void faireUnePropositionEnigmeRapide(ClientHandler client, String proposition){
         this.pauseEnigmeRapide();
         boolean resultatProposition = this.enigmeRapide.faireProposition(proposition);
-        if(resultatProposition == false){
+        if(!resultatProposition){
             repriseEnigmeRapide();
         }else{
             terminerEnigmeRapide();

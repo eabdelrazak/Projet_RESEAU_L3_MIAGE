@@ -3,8 +3,6 @@ package rouefortune.serveur;
 import rouefortune.moteur.Roue;
 import rouefortune.moteur.TableauAffichage;
 
-import java.util.ArrayList;
-
 public class Partie {
 
     private final Serveur serveur;
