@@ -65,24 +65,7 @@ public class EnigmeRapide extends Enigme implements Runnable {
                 e.printStackTrace();
             }
             this.revelerLettre();
-            String message = creerMessageJsonObject("Enigme rapide", this.leTableau.AfficherEnigmeDeviner());
-            System.out.println("TEST "+message);
         }
-    }
-
-    public String creerMessageJsonObject(String message, String contenu){
-        MessageJoueur messageJoueur = new MessageJoueur(message, contenu);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-        String s = null;
-        try {
-            s = mapper.writeValueAsString(messageJoueur);
-        }
-        catch (JsonProcessingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return s;
     }
 
     /**

@@ -1,5 +1,11 @@
 package rouefortune.Joueur;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import rouefortune.MessageJoueur;
+
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
@@ -14,6 +20,7 @@ public class Joueur {
     private int cagnoteManche;
     private String proposition;
     private Socket s;
+    private MessageJoueur message;
 
     public Joueur(String nom){
         this.nomJoueur = nom;
@@ -48,10 +55,12 @@ public class Joueur {
             // the following loop performs the exchange of
             // information between client and client handler
             while (true){
-                System.out.println(dis.readUTF());
-
-            /*String tosend = scn.nextLine();
-            dos.writeUTF(tosend);
+                this.message = receptionMessage(dis.readUTF());
+                if(this.message.getMessage() == "Enigme rapide"){
+                    System.out.println(dis.readUTF());
+                }
+                String tosend = scn.nextLine();
+                dos.writeUTF(tosend);
 
             // If client sends buzz, he will player his
             // and then break from the while loop
@@ -71,21 +80,33 @@ public class Joueur {
 
             // printing date or time as requested by client
             String received = dis.readUTF();
-            System.out.println(received);*/
+            System.out.println(received);
             }
 
             //closing resources
-            //scn.close();
-            //dis.close();
-            //dos.close();
+            scn.close();
+            dis.close();
+            dos.close();
 
         }catch(Exception e){
             e.printStackTrace();
         }
-
     }
 
     public String getProposition() {
         return proposition;
+    }
+
+    public MessageJoueur receptionMessage(String str){
+        MessageJoueur messageJoueur = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+            messageJoueur = mapper.readValue(str, MessageJoueur.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return messageJoueur;
     }
 }

@@ -2,7 +2,7 @@ package rouefortune.Joueur;
 
 import java.io.IOException;
 
-public class App {
+public class AppClient {
     public static void main(String[] args) throws Exception {
         Joueur joueur = new Joueur("Ramon"/*args[0]*/);
         try {

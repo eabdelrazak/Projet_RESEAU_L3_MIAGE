@@ -1,5 +1,11 @@
 package rouefortune.serveur;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import rouefortune.MessageJoueur;
 import rouefortune.moteur.TableauAffichage;
 
 import java.io.*;
@@ -122,12 +128,27 @@ public class Serveur {
         for (ClientHandler client : clientHandlers) {
             try {
                 System.out.println(tableau.AfficherEnigmeDeviner());
-                //String message = creerMessageJsonObject("Enigme rapide", this.leTableau.AfficherEnigmeDeviner());
-                //client.getDos().writeUTF(this.leTableau.AfficherEnigmeDeviner());
-                client.getDos().writeUTF(tableau.AfficherEnigmeDeviner());
+                String message = ""+creerMessageJsonObject("Enigme rapide", tableau.AfficherEnigmeDeviner());
+                //client.getDos().writeUTF(tableau.AfficherEnigmeDeviner());
+                client.getDos().writeUTF(message);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public String creerMessageJsonObject(String message, String contenu){
+        MessageJoueur messageJoueur = new MessageJoueur(message, contenu);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+        String s = null;
+        try {
+            s = mapper.writeValueAsString(messageJoueur);
+        }
+        catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return s;
     }
 }
