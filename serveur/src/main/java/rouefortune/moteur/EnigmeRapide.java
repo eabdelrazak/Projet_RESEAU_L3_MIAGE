@@ -3,6 +3,7 @@ package rouefortune.moteur;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.json.JSONObject;
 import rouefortune.MessageJoueur;
 import rouefortune.serveur.ClientHandler;
 
@@ -61,16 +62,19 @@ public class EnigmeRapide extends Enigme implements Runnable {
                 e.printStackTrace();
             }
             this.revelerLettre();
-            for (ClientHandler client : clientHandlers) {
+            String message = creerMessageJsonObject("Enigme rapide", this.leTableau.AfficherEnigmeDeviner());
+            System.out.println("TEST "+message);
+            /*for (ClientHandler client : clientHandlers) {
                 try {
                     System.out.println(this.leTableau.AfficherEnigmeDeviner());
-                    //String message = creerMessageJsonObject("Enigme rapide", this.leTableau.AfficherEnigmeDeviner());
+                    String message = creerMessageJsonObject("Enigme rapide", this.leTableau.AfficherEnigmeDeviner());
+                    System.out.println(message);
                     //client.getDos().writeUTF(this.leTableau.AfficherEnigmeDeviner());
                     client.getDos().writeUTF(this.leTableau.AfficherEnigmeDeviner());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
         }
     }
 
