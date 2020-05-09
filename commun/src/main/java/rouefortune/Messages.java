@@ -14,6 +14,8 @@ public class Messages {
     public static final String FAIRE_PROPOSITION="serveurfaireproposition";
     //Le serveur dit au client qu'il peut se déconnecter
     public static final String DISCONNECT = "serveurdisconnect";
+    // Le serveur demande une proposition
+    public static final String PROPOSER_REPONSE="clientproposerreponse";
 
     /* MESSAGE CLIENT → SERVEUR */
     // Le client buzz
