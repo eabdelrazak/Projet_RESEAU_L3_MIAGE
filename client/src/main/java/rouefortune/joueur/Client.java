@@ -2,8 +2,10 @@ package rouefortune.joueur;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import rouefortune.Message;
 import rouefortune.Messages;
 import rouefortune.graphique.FenetrePrincipal;
@@ -104,6 +106,20 @@ public class Client {
             e.printStackTrace();
         }
         return message;
+    }
+    public String creerMessageJsonObject(String message, String contenu){
+        Message messageJoueur = new Message(message, contenu);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+        String s = null;
+        try {
+            s = mapper.writeValueAsString(messageJoueur);
+        }
+        catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return s;
     }
 
     public void setJoueur(Joueur joueur) {
