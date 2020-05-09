@@ -85,5 +85,9 @@ public class ClientHandler implements Runnable {
     public DataOutputStream getDos() {
         return dos;
     }
+
+    public Inventaire getInventaire() {
+        return inventaire;
+    }
 }
 
