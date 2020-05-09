@@ -32,7 +32,7 @@ public class TableauAffichage {
         }
 
         for(int i = 0; i < this.longueurEnigme; i++){
-            this.enigmeDeviner[i] = ' ';
+            this.enigmeDeviner[i] = '_';
         }
     }
 
