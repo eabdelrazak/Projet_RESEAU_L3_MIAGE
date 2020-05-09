@@ -56,16 +56,16 @@ public class Joueur {
             // information between client and client handler
             while (true){
                 this.message = receptionMessage(dis.readUTF());
+                //System.out.println(this.message.getMessage());
                 if(this.message.getMessage().equals("Enigme rapide")){
-                    System.out.println(dis.readUTF());
+                    System.out.println(this.message.getContenu());
                 }
-                String tosend = scn.nextLine();
+                String tosend = "";//scn.nextLine();
                 dos.writeUTF(tosend);
 
             // If client sends buzz, he will player his
             // and then break from the while loop
             if(tosend.equals("Buzz")){
-                System.out.println(dis.readUTF());
                 String proposition = scn.nextLine();
                 dos.writeUTF(proposition);
             }
@@ -78,9 +78,6 @@ public class Joueur {
                 break;
             }
 
-            // printing date or time as requested by client
-            String received = dis.readUTF();
-            System.out.println(received);
             }
 
             //closing resources
@@ -108,5 +105,21 @@ public class Joueur {
             e.printStackTrace();
         }
         return messageJoueur;
+    }
+
+    public void proposer() {
+        DataOutputStream dos = null;
+        try {
+            dos = new DataOutputStream(s.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Scanner scn = new Scanner(System.in);
+        String proposition = scn.nextLine();
+        try {
+            dos.writeUTF(proposition);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
