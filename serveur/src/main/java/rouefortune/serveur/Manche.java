@@ -50,21 +50,21 @@ public class Manche {
     /**
      * Mets en pause la révélation des lettres  de l'enigme rapide.
      */
-    private void pauseEnigmeRapide() {
+    public void pauseEnigmeRapide() {
         this.enigmeRapide.pause();
     }
 
     /**
      * Remets en route la révélation des lettres  de l'enigme rapide.
      */
-    private void repriseEnigmeRapide() {
+    public void repriseEnigmeRapide() {
         this.enigmeRapide.resume();
     }
 
     /**
      * Termine l'enigme rapide.
      */
-    private void terminerEnigmeRapide() {
+    public void terminerEnigmeRapide() {
         this.enigmeRapide.stop();
     }
 

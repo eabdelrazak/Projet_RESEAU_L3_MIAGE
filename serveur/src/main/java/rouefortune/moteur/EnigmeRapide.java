@@ -29,7 +29,7 @@ public class EnigmeRapide extends Enigme implements Runnable {
     /**
      * Revele une lettre du tableau de l'enigme rapide/
      */
-    private void revelerLettre() {
+    public void revelerLettre() {
         if(this.leTableau.getNombreCharacterRestant() > 1){
             this.leTableau.revelerLettre();
             this.serveur.envoyerEnigme(this.leTableau);

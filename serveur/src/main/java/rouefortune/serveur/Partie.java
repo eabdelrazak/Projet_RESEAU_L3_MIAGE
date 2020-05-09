@@ -28,4 +28,7 @@ public class Partie {
         this.laManche.commencerManche();
     }
 
+    public Manche getLaManche() {
+        return laManche;
+    }
 }

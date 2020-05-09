@@ -20,6 +20,7 @@ public class Serveur {
     private ArrayList<ClientHandler> clientHandlers;
     Thread [] clientThreads;
     private int nombreDeJoueur = 0;
+    private Partie partie = null;
 
     public Serveur(int nombreDeJoueur) throws IOException {
 
@@ -43,7 +44,7 @@ public class Serveur {
                 DataInputStream dis = new DataInputStream(s.getInputStream());
                 DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 
-                ajoutClient(s, dis, dos, nombreDeJoueur);
+                ajoutClient(s, dis, dos, nombreDeJoueur, this);
 
                 if(clientHandlers.size() == nombreDeJoueur){
                     infiniteLoop = false;
@@ -56,9 +57,9 @@ public class Serveur {
         }
     }
 
-    public void ajoutClient(Socket socket, DataInputStream dis, DataOutputStream dos, int nb){
+    public void ajoutClient(Socket socket, DataInputStream dis, DataOutputStream dos, int nb, Serveur servP){
         if (clientHandlers.size() < nb) {
-            ClientHandler clientHandler = new ClientHandler(socket, dis, dos);
+            ClientHandler clientHandler = new ClientHandler(socket, dis, dos, servP);
             clientHandlers.add(clientHandler);
         }
     }
@@ -80,7 +81,7 @@ public class Serveur {
             e.printStackTrace();
         }
 
-        Partie partie = new Partie(this);
+        partie = new Partie(this);
         partie.commencer();
     }
 
@@ -118,6 +119,10 @@ public class Serveur {
 
     public int getNombreDeJoueur() {
         return nombreDeJoueur;
+    }
+
+    public Partie getPartie() {
+        return partie;
     }
 
     public void setNombreDeJoueur(int nombreDeJoueur) {
