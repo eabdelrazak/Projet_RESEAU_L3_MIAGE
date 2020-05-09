@@ -32,7 +32,7 @@ public class TableauAffichage {
         }
 
         for(int i = 0; i < this.longueurEnigme; i++){
-            this.enigmeDeviner[i] = ' ';
+            this.enigmeDeviner[i] = '_';
         }
     }
 
@@ -44,7 +44,7 @@ public class TableauAffichage {
             if(this.enigmeADeviner[i] == lettre){
                 this.enigmeDeviner[i] = lettre;
                 nombreTrouver++;
-                this.enigmeADeviner[i] = ' ';
+                this.enigmeADeviner[i] = 0;
             }
         }
         return nombreTrouver;
@@ -56,9 +56,9 @@ public class TableauAffichage {
 
         while(!lettreReveler){
             int nombreRandom = rand.nextInt(this.enigmeADeviner.length);
-            if(this.enigmeADeviner[nombreRandom] != ' '){
+            if(this.enigmeADeviner[nombreRandom] != 0){
                 this.enigmeDeviner[nombreRandom] = this.enigmeADeviner[nombreRandom];
-                this.enigmeADeviner[nombreRandom] = ' ';
+                this.enigmeADeviner[nombreRandom] = 0;
                 lettreReveler = true;
             }
         }
@@ -69,7 +69,7 @@ public class TableauAffichage {
         boolean fini = true;
 
         for(int i = 0; i < this.longueurEnigme; i++){
-            if (this.enigmeADeviner[i] != ' ') {
+            if (this.enigmeADeviner[i] != 0) {
                 fini = false;
                 break;
             }
@@ -96,5 +96,15 @@ public class TableauAffichage {
             s+=enigmeDeviner[i];
         }
         return s;
+    }
+
+    public int getNombreCharacterRestant() {
+        int nbRestant = 0;
+        for(int i=0; i < this.enigmeADeviner.length; i++){
+            if(this.enigmeADeviner[i] != 0){
+                nbRestant++;
+            }
+        }
+        return nbRestant;
     }
 }

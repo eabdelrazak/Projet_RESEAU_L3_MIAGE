@@ -2,26 +2,22 @@ package rouefortune.serveur;
 
 import rouefortune.moteur.EnigmeRapide;
 import rouefortune.moteur.TableauAffichage;
-
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class Manche {
 
     private int numeroManche;
     /*private Inventaire[] lesJoueurs;*/
-    private ArrayList<ClientHandler> clientHandlers;
+    private Serveur serveur;
     public int joueurDebutant;
     private TableauAffichage leTableau;
     private EnigmeRapide enigmeRapide;
     private Random rand;
 
 
-    public Manche(int i, ArrayList<ClientHandler> clientHandlers, TableauAffichage tableau) {
+    public Manche(int i, Serveur serveur, TableauAffichage tableau) {
         this.numeroManche = i;
-        this.clientHandlers = clientHandlers;
+        this.serveur = serveur;
         this.leTableau = tableau;
         this.joueurDebutant = -1;
         this.rand = new Random();
@@ -42,7 +38,7 @@ public class Manche {
     private void jouerEnigmeRapide() {
         int random_un = rand.nextInt(Serveur.tabEnigmes.length);
         this.leTableau.setEnigmeADeviner(Serveur.tabEnigmes[random_un][0], Serveur.tabEnigmes[random_un][1]);
-        this.enigmeRapide = new EnigmeRapide(this.leTableau, this.clientHandlers);
+        this.enigmeRapide = new EnigmeRapide(this.leTableau, this.serveur);
         this.enigmeRapide.resume();
     }
 

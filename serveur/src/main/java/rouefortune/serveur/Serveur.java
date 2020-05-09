@@ -1,5 +1,7 @@
 package rouefortune.serveur;
 
+import rouefortune.moteur.TableauAffichage;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -73,7 +75,7 @@ public class Serveur {
         }
 
         Partie partie = new Partie(this);
-        partie.commencer(getClientHandlers());
+        partie.commencer();
     }
 
     public void lireFichierEnigme() throws IOException {
@@ -114,5 +116,18 @@ public class Serveur {
 
     public void setNombreDeJoueur(int nombreDeJoueur) {
         this.nombreDeJoueur = nombreDeJoueur;
+    }
+
+    public void envoyerEnigme(TableauAffichage tableau) {
+        for (ClientHandler client : clientHandlers) {
+            try {
+                System.out.println(tableau.AfficherEnigmeDeviner());
+                //String message = creerMessageJsonObject("Enigme rapide", this.leTableau.AfficherEnigmeDeviner());
+                //client.getDos().writeUTF(this.leTableau.AfficherEnigmeDeviner());
+                client.getDos().writeUTF(tableau.AfficherEnigmeDeviner());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

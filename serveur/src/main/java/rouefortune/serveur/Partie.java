@@ -23,8 +23,8 @@ public class Partie {
         this.leTableau = new TableauAffichage(this);
     }
 
-    public void commencer(ArrayList<ClientHandler> clientHandlers){
-        this.laManche = new Manche(1, clientHandlers, leTableau);
+    public void commencer(){
+        this.laManche = new Manche(1, this.serveur, leTableau);
         this.laManche.commencerManche();
     }
 
