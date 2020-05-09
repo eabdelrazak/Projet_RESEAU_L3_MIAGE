@@ -64,8 +64,9 @@ public class EnigmeRapide extends Enigme implements Runnable {
             for (ClientHandler client : clientHandlers) {
                 try {
                     System.out.println(this.leTableau.AfficherEnigmeDeviner());
+                    //String message = creerMessageJsonObject("Enigme rapide", this.leTableau.AfficherEnigmeDeviner());
+                    //client.getDos().writeUTF(this.leTableau.AfficherEnigmeDeviner());
                     client.getDos().writeUTF(this.leTableau.AfficherEnigmeDeviner());
-                    //client.getDos().writeUTF(creerMessageJsonObject("Enigme rapide", this.leTableau.AfficherEnigmeDeviner()));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
