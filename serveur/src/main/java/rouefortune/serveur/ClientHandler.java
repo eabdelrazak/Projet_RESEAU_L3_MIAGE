@@ -9,12 +9,14 @@ public class ClientHandler implements Runnable {
     final DataOutputStream dos;
     final Socket s;
     private Inventaire inventaire;
+    private Serveur serveur;
 
-    public ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos) {
+    public ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos, Serveur serveurP) {
         this.s = s;
         this.dis = dis;
         this.dos = dos;
         this.inventaire = new Inventaire();
+        this.serveur = serveurP;
     }
 
     @Override
@@ -25,7 +27,7 @@ public class ClientHandler implements Runnable {
 
         while (true)
         {
-            /*try {
+            try {
                 // Ask user what he wants
                 dos.writeUTF("Enigme rapide - Trouvez le mot");
 
@@ -41,20 +43,11 @@ public class ClientHandler implements Runnable {
                     break;
                 }
 
-                // creating Date object
-                Date date = new Date();
-
-                // write on output stream based on the
-                // answer from the client
                 switch (received) {
 
-                    case "Date" :
+                    case "Buzz" :
+                        this.serveur.getPartie().getLaManche().pauseEnigmeRapide();
                         toReturn = "What's the date to day";
-                        dos.writeUTF(toReturn);
-                        break;
-
-                    case "Time" :
-                        toReturn = "ITS TIME TO SLEEP";
                         dos.writeUTF(toReturn);
                         break;
 
@@ -64,10 +57,10 @@ public class ClientHandler implements Runnable {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            }*/
+            }
         }
 
-       /* try
+        try
         {
             // closing resources
             this.dis.close();
@@ -75,7 +68,7 @@ public class ClientHandler implements Runnable {
 
         }catch(IOException e){
             e.printStackTrace();
-        }*/
+        }
     }
 
     public DataInputStream getDis() {
