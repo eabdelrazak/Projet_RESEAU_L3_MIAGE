@@ -6,11 +6,9 @@ import javax.swing.*;
 
 public class FenetrePrincipal extends JFrame {
 
-    private Joueur joueur;
     Panneau pan;
 
     public FenetrePrincipal(Joueur joueur){
-        this.joueur = joueur;
         this.setTitle("Roue de la Fortune - JBANT");
         this.setSize(800, 600);
         //this.setResizable(false);
@@ -24,8 +22,4 @@ public class FenetrePrincipal extends JFrame {
         this.setVisible(true);
     }
 
-
-    public void afficherMessageErreurConnexion(){
-
-    }
 }

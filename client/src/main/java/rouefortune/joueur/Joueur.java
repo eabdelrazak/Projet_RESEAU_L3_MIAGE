@@ -31,7 +31,7 @@ public class Joueur {
 
     /**
      * Fonction permettant la connection d'un joueur au serveur.
-     * @throws IOException
+     * @throws IOException Il peut y avoir un problème
      */
     public void connectJoueur() throws IOException {
         //getting localhost ip
@@ -42,9 +42,9 @@ public class Joueur {
 
     /**
      * Fonction permettant au joueur de jouer son tour.
-     * @throws IOException
+     * @throws Exception Il peut y avoir un problème
      */
-    public void jouer() throws IOException {
+    public void jouer() throws Exception {
         try{
             Scanner scn = new Scanner(System.in);
 
@@ -117,6 +117,7 @@ public class Joueur {
         Scanner scn = new Scanner(System.in);
         String proposition = scn.nextLine();
         try {
+            assert dos != null;
             dos.writeUTF(proposition);
         } catch (IOException e) {
             e.printStackTrace();

@@ -15,7 +15,7 @@ import java.net.*;
 
 public class Serveur {
 
-    public static String[][] tabEnigmes;
+    public String[][] tabEnigmes;
     public boolean infiniteLoop = true;
     private ArrayList<ClientHandler> clientHandlers;
     Thread [] clientThreads;
@@ -23,19 +23,19 @@ public class Serveur {
 
     public Serveur(int nombreDeJoueur) throws IOException {
 
-        /** Le serveur ecoute sur le port 5056 **/
+        /* Le serveur ecoute sur le port 5056 */
         ServerSocket serverSocket = new ServerSocket(5056);
-        /** Creation d'une liste de thread pour la gestion de chaque client **/
+        /* Creation d'une liste de thread pour la gestion de chaque client */
         this.clientHandlers = new ArrayList<>();
         setNombreDeJoueur(nombreDeJoueur);
 
         System.out.println("Attente des joueurs");
 
-        /** Boucle infini pour recupérer les requetes de connexion client **/
+        /* Boucle infini pour recupérer les requetes de connexion client */
         while (infiniteLoop) {
             Socket s = null;
             try {
-                /** objet socket permettant d'écouter qu'un client fasse une demande de connexion **/
+                /* objet socket permettant d'écouter qu'un client fasse une demande de connexion */
                 s = serverSocket.accept();
 
                 System.out.println("Un nouveau joueur s'est connecté : " + s);
@@ -50,6 +50,7 @@ public class Serveur {
                 }
 
             } catch (Exception e){
+                assert s != null;
                 s.close();
                 e.printStackTrace();
             }
@@ -70,8 +71,8 @@ public class Serveur {
             clientThreads[i] = new Thread(clientHandlers.get(i));
         }
 
-        for(int i = 0; i < clientThreads.length; i++){
-            clientThreads[i].start();
+        for (Thread clientThread : clientThreads) {
+            clientThread.start();
         }
 
         try {

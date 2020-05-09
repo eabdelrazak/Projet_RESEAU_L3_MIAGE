@@ -1,7 +1,6 @@
 package rouefortune.serveur;
 
 import java.io.*;
-import java.util.*;
 import java.net.*;
 
 public class ClientHandler implements Runnable {
@@ -25,9 +24,9 @@ public class ClientHandler implements Runnable {
 
         while (true)
         {
-            /*try {
+            try {
                 // Ask user what he wants
-                dos.writeUTF("Enigme rapide - Trouvez le mot");
+                //dos.writeUTF("Enigme rapide - Trouvez le mot");
 
                 // receive the answer from client
                 received = dis.readUTF();
@@ -40,9 +39,6 @@ public class ClientHandler implements Runnable {
                     System.out.println("Connection closed");
                     break;
                 }
-
-                // creating Date object
-                Date date = new Date();
 
                 // write on output stream based on the
                 // answer from the client
@@ -64,7 +60,7 @@ public class ClientHandler implements Runnable {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            }*/
+            }
         }
 
        /* try
