@@ -1,5 +1,6 @@
 package rouefortune.graphique;
 
+import rouefortune.Messages;
 import rouefortune.joueur.Joueur;
 
 import javax.imageio.ImageIO;
@@ -7,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -37,8 +40,15 @@ public class Buzzer extends JButton implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println("BUZZ");
-        this.joueur.proposer();
+        try {
+            DataInputStream dis = new DataInputStream(joueur.getClient().getSocket().getInputStream());
+            DataOutputStream dos = new DataOutputStream(joueur.getClient().getSocket().getOutputStream());
+            dos.writeUTF(joueur.getClient().creerMessageJsonObject(Messages.BUZZ, null));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        //System.out.println("BUZZ");
+        //this.joueur.proposer();
     }
 
     @Override

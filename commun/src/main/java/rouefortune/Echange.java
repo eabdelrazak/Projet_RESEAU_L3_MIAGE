@@ -1,13 +1,13 @@
 package rouefortune;
 
-public class Message {
+public class Echange {
 
     private String message;
     private String contenu;
 
-    public Message(){}
+    public Echange(){}
 
-    public Message(String message, String contenu){
+    public Echange(String message, String contenu){
         this.message = message;
         this.contenu = contenu;
     }

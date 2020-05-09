@@ -6,11 +6,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import rouefortune.Message;
+import rouefortune.Echange;
 import rouefortune.Messages;
 
 import java.io.*;
-import java.util.*;
 import java.net.*;
 
 public class ClientHandler implements Runnable {
@@ -19,7 +18,7 @@ public class ClientHandler implements Runnable {
     final Socket s;
     private Inventaire inventaire;
     private Serveur serveur;
-    private Message messageReceived;
+    private Echange messageReceived;
     private boolean buzz = false;
 
     public ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos, Serveur serveurP) {
@@ -46,7 +45,12 @@ public class ClientHandler implements Runnable {
                 this.messageReceived = receptionMessage(dis.readUTF());
                 //received = messageReceived.g
 
-                switch (this.messageReceived.getContenu()) {
+                switch (this.messageReceived.getMessage()) {
+                    case Messages.NOM:
+                        this.getInventaire().setNomJoueur(this.messageReceived.getContenu());
+                        dos.writeUTF(creerMessageJsonObject(Messages.NOM,"Identification du joueur : "+ this.getInventaire().getNomJoueur()));
+                        dos.writeUTF(creerMessageJsonObject(Messages.BEGIN, "Soyez prêt la partie va commencer"));
+                        break;
                     case Messages.BUZZ:
                         this.serveur.getPartie().getLaManche().pauseEnigmeRapide();
                         dos.writeUTF(creerMessageJsonObject(Messages.PROPOSER_REPONSE,null));
@@ -78,13 +82,13 @@ public class ClientHandler implements Runnable {
         }*/
     }
 
-    public Message receptionMessage(String str){
-        Message message = null;
+    public Echange receptionMessage(String str){
+        Echange message = null;
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-            message = mapper.readValue(str, Message.class);
+            message = mapper.readValue(str, Echange.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -92,7 +96,7 @@ public class ClientHandler implements Runnable {
     }
 
     public String creerMessageJsonObject(String message, String contenu){
-        Message messageJoueur = new Message(message, contenu);
+        Echange messageJoueur = new Echange(message, contenu);
         ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
@@ -116,6 +120,10 @@ public class ClientHandler implements Runnable {
 
     public Inventaire getInventaire() {
         return inventaire;
+    }
+
+    public Socket getS() {
+        return s;
     }
 }
 

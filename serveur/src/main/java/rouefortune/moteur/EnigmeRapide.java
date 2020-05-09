@@ -1,7 +1,10 @@
 package rouefortune.moteur;
 
+import rouefortune.Messages;
+import rouefortune.serveur.ClientHandler;
 import rouefortune.serveur.Serveur;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class EnigmeRapide extends Enigme implements Runnable {
@@ -89,8 +92,12 @@ public class EnigmeRapide extends Enigme implements Runnable {
     /**
      * Permet de lancer le thread au début de la création de l'enigme (le thread est immédiatement mis en pause)
      */
-    private void start() {
+    public void start() {
         this.threadLettre.start();
+    }
+
+    public void startThread(){
+        this.start();
     }
 
     public boolean faireProposition(String proposition) {

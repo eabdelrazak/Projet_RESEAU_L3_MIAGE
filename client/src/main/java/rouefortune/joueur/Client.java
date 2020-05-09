@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import rouefortune.Message;
+import rouefortune.Echange;
 import rouefortune.Messages;
 import rouefortune.graphique.FenetrePrincipal;
 import rouefortune.graphique.Panneau;
@@ -20,7 +20,7 @@ import java.net.Socket;
 public class Client {
 
     private Socket s;
-    private Message message;
+    private Echange message;
     private Joueur joueur;
     private FenetrePrincipal fenetrePrincipal;
 
@@ -44,6 +44,7 @@ public class Client {
             DataOutputStream dos = new DataOutputStream(s.getOutputStream());
             Boolean disconnect = false;
 
+
             // the following loop performs the exchange of
             // information between client and client handler
             while (true){
@@ -54,6 +55,13 @@ public class Client {
                         System.out.println("Connected");
                         this.fenetrePrincipal.setPanState(Panneau.CONNECTED);
                         this.fenetrePrincipal.repaint();
+                        dos.writeUTF(creerMessageJsonObject(Messages.NOM, joueur.getNomJoueur()));
+                        break;
+                    case Messages.BEGIN:
+                        System.out.println(this.message.getContenu());
+                        break;
+                    case Messages.NOM:
+                        System.out.println(this.message.getContenu());
                         break;
                     case Messages.ENIGME_RAPIDE:
                         System.out.println(this.message.getContenu());
@@ -79,8 +87,6 @@ public class Client {
                 }
 
             }
-
-
             //closing resources
             dis.close();
             dos.close();
@@ -91,20 +97,20 @@ public class Client {
 
     }
 
-    public Message receptionMessage(String str){
-        Message message = null;
+    public Echange receptionMessage(String str){
+        Echange message = null;
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-            message = mapper.readValue(str, Message.class);
+            message = mapper.readValue(str, Echange.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return message;
     }
     public String creerMessageJsonObject(String message, String contenu){
-        Message messageJoueur = new Message(message, contenu);
+        Echange messageJoueur = new Echange(message, contenu);
         ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         mapper.configure(SerializationFeature.INDENT_OUTPUT, true);

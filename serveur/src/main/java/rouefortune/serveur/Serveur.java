@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import rouefortune.Message;
+import rouefortune.Echange;
 import rouefortune.Messages;
 import rouefortune.moteur.TableauAffichage;
 
@@ -22,6 +22,8 @@ public class Serveur {
     Thread [] clientThreads;
     private int nombreDeJoueur = 0;
     private Partie partie = null;
+    private boolean setpartie = false;
+    private int nbReady = 0;
 
     public Serveur(int nombreDeJoueur) throws IOException {
 
@@ -38,7 +40,7 @@ public class Serveur {
             Socket s = null;
             try {
                 /* objet socket permettant d'écouter qu'un client fasse une demande de connexion */
-                s = serverSocket.accept();
+                    s = serverSocket.accept();
 
                 System.out.println("Un nouveau joueur s'est connecté : " + s);
 
@@ -49,7 +51,10 @@ public class Serveur {
                 dos.writeUTF(creerMessageJsonObject(Messages.CONNEXION_REUSSI, null));
 
                 if(clientHandlers.size() == nombreDeJoueur){
-                    infiniteLoop = false;
+                    //if(allIndentified()){
+                        infiniteLoop = false;
+                    //}
+
                 }
 
             } catch (Exception e){
@@ -58,9 +63,11 @@ public class Serveur {
                 e.printStackTrace();
             }
         }
+        System.out.println("DEBUT");
+        this.debutPartie();
     }
 
-    public void ajoutClient(Socket socket, DataInputStream dis, DataOutputStream dos, int nb, Serveur servP){
+    public synchronized void ajoutClient(Socket socket, DataInputStream dis, DataOutputStream dos, int nb, Serveur servP){
         if (clientHandlers.size() < nb) {
             ClientHandler clientHandler = new ClientHandler(socket, dis, dos, servP);
             clientHandlers.add(clientHandler);
@@ -146,7 +153,7 @@ public class Serveur {
     }
 
     public String creerMessageJsonObject(String message, String contenu){
-        Message messageJoueur = new Message(message, contenu);
+        Echange messageJoueur = new Echange(message, contenu);
         ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         mapper.configure(SerializationFeature.INDENT_OUTPUT, true);

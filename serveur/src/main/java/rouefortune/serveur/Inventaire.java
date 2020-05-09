@@ -20,4 +20,8 @@ public class Inventaire {
     public String getNomJoueur(){
         return nomJoueur;
     }
+
+    public void setNomJoueur(String nomJoueur) {
+        this.nomJoueur = nomJoueur;
+    }
 }

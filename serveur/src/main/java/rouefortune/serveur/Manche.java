@@ -94,4 +94,8 @@ public class Manche {
     public void tournerRoue(int i){
         //this.lesJoueurs[i].tournerLaRoue();
     }
+
+    public EnigmeRapide getEnigmeRapide() {
+        return enigmeRapide;
+    }
 }

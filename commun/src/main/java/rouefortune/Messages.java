@@ -16,6 +16,8 @@ public class Messages {
     public static final String DISCONNECT = "serveurdisconnect";
     // Le serveur demande une proposition
     public static final String PROPOSER_REPONSE="clientproposerreponse";
+    // Le serveur demande une proposition
+    public static final String BEGIN = "debut";
 
     /* MESSAGE CLIENT → SERVEUR */
     // Le client buzz
@@ -28,6 +30,8 @@ public class Messages {
     public static final String PROPOSER_LETTRE="clientproposerconsonne";
     // Le client souhaite quitter le jeu
     public static final String QUITTER="clientquitte";
-    public static final String EXIT="clientquitte";
+
+    public static final String NOM = "nomduclient";
+
 
 }

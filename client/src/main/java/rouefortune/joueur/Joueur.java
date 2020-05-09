@@ -48,4 +48,16 @@ public class Joueur {
             e.printStackTrace();
         }
     }
+
+    public String getNomJoueur() {
+        return nomJoueur;
+    }
+
+    public void setNomJoueur(String nomJoueur) {
+        this.nomJoueur = nomJoueur;
+    }
+
+    public Client getClient() {
+        return client;
+    }
 }
