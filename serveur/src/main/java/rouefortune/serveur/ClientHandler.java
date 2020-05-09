@@ -36,6 +36,9 @@ public class ClientHandler implements Runnable {
         {
             try {
                 // receive the answer from client
+                if(s.isClosed()){
+                    break;
+                }
                 received = dis.readUTF();
 
                 if(received.equals("Quitter") || received.equals("Exit"))
@@ -61,6 +64,7 @@ public class ClientHandler implements Runnable {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                break;
             }
         }
 

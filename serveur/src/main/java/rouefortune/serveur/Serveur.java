@@ -46,6 +46,7 @@ public class Serveur {
                 DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 
                 ajoutClient(s, dis, dos, nombreDeJoueur, this);
+                dos.writeUTF(creerMessageJsonObject(Messages.CONNEXION_REUSSI, null));
 
                 if(clientHandlers.size() == nombreDeJoueur){
                     infiniteLoop = false;
@@ -131,12 +132,12 @@ public class Serveur {
         this.nombreDeJoueur = nombreDeJoueur;
     }
 
+
     public void envoyerEnigme(TableauAffichage tableau) {
         for (ClientHandler client : clientHandlers) {
             try {
                 System.out.println(tableau.AfficherEnigmeDeviner());
                 String message = creerMessageJsonObject(Messages.ENIGME_RAPIDE, tableau.AfficherEnigmeDeviner());
-                //client.getDos().writeUTF(tableau.AfficherEnigmeDeviner());
                 client.getDos().writeUTF(message);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -157,5 +158,21 @@ public class Serveur {
             e.printStackTrace();
         }
         return s;
+    }
+
+    public void mettreEnPause(ClientHandler joueurQuiABuzz){
+        for (ClientHandler client : clientHandlers) {
+            String message;
+            if(client != joueurQuiABuzz){
+                message = creerMessageJsonObject(Messages.PAUSE, joueurQuiABuzz.getInventaire().getNomJoueur());
+            }else{
+                message = creerMessageJsonObject(Messages.FAIRE_PROPOSITION, null);
+            }
+            try {
+                client.getDos().writeUTF(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

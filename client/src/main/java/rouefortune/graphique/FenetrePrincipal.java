@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class FenetrePrincipal extends JFrame {
 
-    Panneau pan;
+    public Panneau pan;
 
     public FenetrePrincipal(Joueur joueur){
         this.setTitle("Roue de la Fortune - JBANT");
@@ -22,4 +22,11 @@ public class FenetrePrincipal extends JFrame {
         this.setVisible(true);
     }
 
+    public void setPanState(int state){
+        this.pan.setState(state);
+    }
+
+    public int getPanState() {
+        return this.pan.getState();
+    }
 }

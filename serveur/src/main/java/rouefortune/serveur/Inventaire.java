@@ -1,7 +1,7 @@
 package rouefortune.serveur;
 
 public class Inventaire {
-    private int numeroJoueur;
+    private String nomJoueur;
     private int cagnotePartie;
     private int cagnoteManche;
 
@@ -15,5 +15,9 @@ public class Inventaire {
     }
     public void addCagnoteManche(int somme){
         this.cagnoteManche += somme;
+    }
+
+    public String getNomJoueur(){
+        return nomJoueur;
     }
 }

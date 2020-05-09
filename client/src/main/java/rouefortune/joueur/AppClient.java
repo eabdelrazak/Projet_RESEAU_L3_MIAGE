@@ -6,11 +6,14 @@ import java.io.IOException;
 
 public class AppClient {
     public static void main(String[] args) throws Exception {
-        Joueur joueur = new Joueur("Ramon"/*args[0]*/);
+        Client client = new Client();
+        Joueur joueur = new Joueur("Ramon"/*args[0]*/, client);
+        client.setJoueur(joueur);
         FenetrePrincipal fenetrePrincipal = new FenetrePrincipal(joueur);
+        client.setFenetrePrincipal(fenetrePrincipal);
         try {
-            joueur.connectJoueur();
-            joueur.jouer();
+            client.connectJoueur();
+            client.boucleReceptionMessage();
         } catch (IOException e) {
             e.printStackTrace();
         }
