@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.net.*;
 
-class ClientHandler implements Runnable {
+public class ClientHandler implements Runnable {
     final DataInputStream dis;
     final DataOutputStream dos;
     final Socket s;
@@ -25,7 +25,7 @@ class ClientHandler implements Runnable {
 
         while (true)
         {
-            try {
+            /*try {
                 // Ask user what he wants
                 dos.writeUTF("Enigme rapide - Trouvez le mot");
 
@@ -64,10 +64,10 @@ class ClientHandler implements Runnable {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
 
-        try
+       /* try
         {
             // closing resources
             this.dis.close();
@@ -75,7 +75,15 @@ class ClientHandler implements Runnable {
 
         }catch(IOException e){
             e.printStackTrace();
-        }
+        }*/
+    }
+
+    public DataInputStream getDis() {
+        return dis;
+    }
+
+    public DataOutputStream getDos() {
+        return dos;
     }
 }
 

@@ -71,6 +71,7 @@ public class Serveur {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         Partie partie = new Partie(this);
         partie.commencer(getClientHandlers());
     }

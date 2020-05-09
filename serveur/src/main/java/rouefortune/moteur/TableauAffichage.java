@@ -89,4 +89,12 @@ public class TableauAffichage {
     public char[] getEnigmeDeviner() {
         return enigmeDeviner;
     }
+
+    public String AfficherEnigmeDeviner(){
+        String s = "";
+        for(int i = 0; i < enigmeDeviner.length; i++){
+            s+=enigmeDeviner[i];
+        }
+        return s;
+    }
 }

@@ -1,17 +1,27 @@
 package rouefortune.moteur;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import rouefortune.MessageJoueur;
+import rouefortune.serveur.ClientHandler;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class EnigmeRapide extends Enigme implements Runnable {
     private volatile boolean running = true;
     private volatile boolean paused = true;
+    private ArrayList<ClientHandler> clientHandlers;
     private final Object pauseLock = new Object();
 
     public Thread threadLettre;
 
-    public EnigmeRapide(TableauAffichage tableau){
+    public EnigmeRapide(TableauAffichage tableau, ArrayList<ClientHandler> clientHandlers) {
         super(tableau);
-        this.threadLettre = new Thread( this);
+        this.clientHandlers = clientHandlers;
+        this.threadLettre = new Thread(this);
         this.start();
     }
 
@@ -46,12 +56,36 @@ public class EnigmeRapide extends Enigme implements Runnable {
                 }
             }
             try {
-                TimeUnit.SECONDS.sleep(1);
+                TimeUnit.SECONDS.sleep(2);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             this.revelerLettre();
+            for (ClientHandler client : clientHandlers) {
+                try {
+                    System.out.println(this.leTableau.AfficherEnigmeDeviner());
+                    client.getDos().writeUTF(this.leTableau.AfficherEnigmeDeviner());
+                    //client.getDos().writeUTF(creerMessageJsonObject("Enigme rapide", this.leTableau.AfficherEnigmeDeviner()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+    }
+
+    public String creerMessageJsonObject(String message, String contenu){
+        MessageJoueur messageJoueur = new MessageJoueur(message, contenu);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+        String s = null;
+        try {
+            s = mapper.writeValueAsString(messageJoueur);
+        }
+        catch (JsonProcessingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return s;
     }
 
     /**
@@ -86,7 +120,7 @@ public class EnigmeRapide extends Enigme implements Runnable {
         this.threadLettre.start();
     }
 
-    public boolean faireProposition(String proposition){
+    public boolean faireProposition(String proposition) {
         return this.leTableau.comparerProposition(proposition);
     }
 }

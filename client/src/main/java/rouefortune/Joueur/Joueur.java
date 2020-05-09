@@ -39,17 +39,18 @@ public class Joueur {
      */
     public void jouer() throws IOException {
         try{
-        Scanner scn = new Scanner(System.in);
+            Scanner scn = new Scanner(System.in);
 
-        // obtaining input and out streams
-        DataInputStream dis = new DataInputStream(s.getInputStream());
-        DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+            // obtaining input and out streams
+            DataInputStream dis = new DataInputStream(s.getInputStream());
+            DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 
-        // the following loop performs the exchange of
-        // information between client and client handler
-        while (true){
-            System.out.println(dis.readUTF());
-            String tosend = scn.nextLine();
+            // the following loop performs the exchange of
+            // information between client and client handler
+            while (true){
+                System.out.println(dis.readUTF());
+
+            /*String tosend = scn.nextLine();
             dos.writeUTF(tosend);
 
             // If client sends buzz, he will player his
@@ -70,13 +71,13 @@ public class Joueur {
 
             // printing date or time as requested by client
             String received = dis.readUTF();
-            System.out.println(received);
-        }
+            System.out.println(received);*/
+            }
 
-        //closing resources
-        scn.close();
-        dis.close();
-        dos.close();
+            //closing resources
+            //scn.close();
+            //dis.close();
+            //dos.close();
 
         }catch(Exception e){
             e.printStackTrace();
