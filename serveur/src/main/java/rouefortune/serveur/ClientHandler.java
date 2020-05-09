@@ -2,9 +2,12 @@ package rouefortune.serveur;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import rouefortune.Message;
+import rouefortune.Messages;
 
 import java.io.*;
 import java.util.*;
@@ -16,7 +19,8 @@ public class ClientHandler implements Runnable {
     final Socket s;
     private Inventaire inventaire;
     private Serveur serveur;
-    private Message message;
+    private Message messageReceived;
+    private boolean buzz = false;
 
     public ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos, Serveur serveurP) {
         this.s = s;
@@ -36,27 +40,22 @@ public class ClientHandler implements Runnable {
         {
             try {
                 // receive the answer from client
-                received = dis.readUTF();
+                this.messageReceived = receptionMessage(dis.readUTF());
+                //received = messageReceived.g
 
-                if(received.equals("Quitter") || received.equals("Exit"))
-                {
-                    System.out.println("Joueur " + this.s + " souhaites quitter...");
-                    System.out.println("Fermeture de la connexion.");
-                    this.s.close();
-                    System.out.println("Connection closed");
-                    break;
-                }
-
-                switch (received) {
-
-                    case "Buzz" :
+                switch (this.messageReceived.getContenu()) {
+                    case Messages.BUZZ:
                         this.serveur.getPartie().getLaManche().pauseEnigmeRapide();
-                        toReturn = "What's the date to day";
-                        dos.writeUTF(toReturn);
+                        dos.writeUTF(creerMessageJsonObject(Messages.PROPOSER_REPONSE,null));
                         break;
-
+                    case Messages.QUITTER:
+                        System.out.println("Joueur " + this.s + " souhaites quitter...");
+                        System.out.println("Fermeture de la connexion.");
+                        this.s.close();
+                        System.out.println("Connection closed");
+                        break;
                     default:
-                        
+
                         break;
                 }
             } catch (IOException e) {
@@ -64,15 +63,15 @@ public class ClientHandler implements Runnable {
             }
         }
 
-        try
+       /* try
         {
             // closing resources
-            this.dis.close();
-            this.dos.close();
+            //this.dis.close();
+            //this.dos.close();
 
         }catch(IOException e){
             e.printStackTrace();
-        }
+        }*/
     }
 
     public Message receptionMessage(String str){
@@ -86,6 +85,21 @@ public class ClientHandler implements Runnable {
             e.printStackTrace();
         }
         return message;
+    }
+
+    public String creerMessageJsonObject(String message, String contenu){
+        Message messageJoueur = new Message(message, contenu);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+        String s = null;
+        try {
+            s = mapper.writeValueAsString(messageJoueur);
+        }
+        catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return s;
     }
 
     public DataInputStream getDis() {

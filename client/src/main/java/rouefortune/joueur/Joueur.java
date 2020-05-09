@@ -2,8 +2,10 @@ package rouefortune.joueur;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import rouefortune.Message;
 import rouefortune.Messages;
 
@@ -21,7 +23,7 @@ public class Joueur {
     private int cagnoteManche;
     private String proposition;
     private Socket s;
-    private Message message;
+    private Message message , messageToSend;
 
     public Joueur(String nom){
         this.nomJoueur = nom;
@@ -61,9 +63,8 @@ public class Joueur {
                 if(this.message.getMessage().equals(Messages.ENIGME_RAPIDE)){
                     System.out.println(this.message.getContenu());
                 }
-                String tosend = "";//scn.nextLine();
-                dos.writeUTF(tosend);
-
+                String tosend = "Buzz";//scn.nextLine();
+                dos.writeUTF(creerMessageJsonObject(Messages.BUZZ,null));
             // If client sends buzz, he will player his
             // and then break from the while loop
             if(tosend.equals("Buzz")){
@@ -106,6 +107,21 @@ public class Joueur {
             e.printStackTrace();
         }
         return message;
+    }
+
+    public String creerMessageJsonObject(String message, String contenu){
+        Message messageJoueur = new Message(message, contenu);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+        String s = null;
+        try {
+            s = mapper.writeValueAsString(messageJoueur);
+        }
+        catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return s;
     }
 
     public void proposer() {

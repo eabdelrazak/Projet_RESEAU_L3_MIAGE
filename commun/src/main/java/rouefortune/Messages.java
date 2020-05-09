@@ -6,6 +6,8 @@ public class Messages {
     public static final String ENIGME_RAPIDE="serveurafficherenigmerapide";
     // Le serveur commence une enigme normale
     public static final String ENIGME_NORMALE="serveurafficherenigmenormale";
+    // Le serveur demande une proposition
+    public static final String PROPOSER_REPONSE="clientproposerreponse";
 
     /* MESSAGE CLIENT → SERVEUR */
     // Le client buzz
