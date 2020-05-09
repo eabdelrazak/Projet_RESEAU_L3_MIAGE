@@ -5,6 +5,7 @@ import rouefortune.moteur.TableauAffichage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class Manche {
@@ -15,6 +16,7 @@ public class Manche {
     public int joueurDebutant;
     private TableauAffichage leTableau;
     private EnigmeRapide enigmeRapide;
+    private Random rand;
 
 
     public Manche(int i, ArrayList<ClientHandler> clientHandlers, TableauAffichage tableau) {
@@ -22,13 +24,14 @@ public class Manche {
         this.clientHandlers = clientHandlers;
         this.leTableau = tableau;
         this.joueurDebutant = -1;
+        this.rand = new Random();
     }
 
     public void commencerManche(){
         if(this.joueurDebutant == -1){
             jouerEnigmeRapide();
         }else{
-            jouer();
+            jouerEnigmeLongue();
         }
     }
 
@@ -36,6 +39,11 @@ public class Manche {
      * Commence l'enigme rapide et la révélation des lettres
      */
     private void jouerEnigmeRapide() {
+
+        int random_un = rand.nextInt(Serveur.tabEnigmes.length);
+
+        this.leTableau.setEnigmeADeviner(Serveur.tabEnigmes[random_un][0], Serveur.tabEnigmes[random_un][1]);
+
         this.enigmeRapide = new EnigmeRapide(this.leTableau);
         this.enigmeRapide.resume();
         /*for(ClientHandler client : clientHandlers) {
@@ -83,7 +91,7 @@ public class Manche {
         }
     }*/
 
-    public void jouer() {
+    public void jouerEnigmeLongue() {
         /*for(int i = this.joueurDebutant; i < this.lesJoueurs.length; i++){
             tournerRoue(i);
         }

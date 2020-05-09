@@ -2,14 +2,12 @@ package rouefortune.serveur;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.net.*;
-import java.text.*;
 
 public class Serveur {
 
-    public String[][] tabEnigmes;
+    public static String[][] tabEnigmes;
     public boolean infiniteLoop = true;
     private ArrayList<ClientHandler> clientHandlers;
     Thread [] clientThreads;
@@ -68,6 +66,11 @@ public class Serveur {
             clientThreads[i].start();
         }
 
+        try {
+            lireFichierEnigme();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Partie partie = new Partie(this);
         partie.commencer(getClientHandlers());
     }
