@@ -27,7 +27,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>rouefortune.Joueur.AppClient
+                    <mainClass>rouefortune.joueur.AppClient
                     </mainClass>
                 </configuration>
             </plugin>

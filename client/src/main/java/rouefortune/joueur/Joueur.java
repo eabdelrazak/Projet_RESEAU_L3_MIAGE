@@ -1,4 +1,4 @@
-package rouefortune.Joueur;
+package rouefortune.joueur;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -56,7 +56,7 @@ public class Joueur {
             // information between client and client handler
             while (true){
                 this.message = receptionMessage(dis.readUTF());
-                if(this.message.getMessage() == "Enigme rapide"){
+                if(this.message.getMessage().equals("Enigme rapide")){
                     System.out.println(dis.readUTF());
                 }
                 String tosend = scn.nextLine();
