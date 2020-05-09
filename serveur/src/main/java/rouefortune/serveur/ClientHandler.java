@@ -28,8 +28,6 @@ public class ClientHandler implements Runnable {
         while (true)
         {
             try {
-                // Ask user what he wants
-                dos.writeUTF("Enigme rapide - Trouvez le mot");
 
                 // receive the answer from client
                 received = dis.readUTF();
@@ -52,7 +50,7 @@ public class ClientHandler implements Runnable {
                         break;
 
                     default:
-                        dos.writeUTF("Invalid input");
+                        
                         break;
                 }
             } catch (IOException e) {

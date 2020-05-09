@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import rouefortune.MessageJoueur;
+import rouefortune.Message;
 import rouefortune.moteur.TableauAffichage;
 
 import java.io.*;
@@ -144,7 +144,7 @@ public class Serveur {
     }
 
     public String creerMessageJsonObject(String message, String contenu){
-        MessageJoueur messageJoueur = new MessageJoueur(message, contenu);
+        Message messageJoueur = new Message(message, contenu);
         ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         mapper.configure(SerializationFeature.INDENT_OUTPUT, true);

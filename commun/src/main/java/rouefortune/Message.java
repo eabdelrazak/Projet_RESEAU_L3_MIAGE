@@ -1,13 +1,13 @@
 package rouefortune;
 
-public class MessageJoueur {
+public class Message {
 
     private String message;
     private String contenu;
 
-    public MessageJoueur(){}
+    public Message(){}
 
-    public MessageJoueur(String message, String contenu){
+    public Message(String message, String contenu){
         this.message = message;
         this.contenu = contenu;
     }

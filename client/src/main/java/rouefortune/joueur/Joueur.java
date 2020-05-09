@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import rouefortune.MessageJoueur;
+import rouefortune.Message;
 
 import java.io.*;
 import java.net.*;
@@ -20,7 +20,7 @@ public class Joueur {
     private int cagnoteManche;
     private String proposition;
     private Socket s;
-    private MessageJoueur message;
+    private Message message;
 
     public Joueur(String nom){
         this.nomJoueur = nom;
@@ -94,17 +94,17 @@ public class Joueur {
         return proposition;
     }
 
-    public MessageJoueur receptionMessage(String str){
-        MessageJoueur messageJoueur = null;
+    public Message receptionMessage(String str){
+        Message message = null;
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-            messageJoueur = mapper.readValue(str, MessageJoueur.class);
+            message = mapper.readValue(str, Message.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return messageJoueur;
+        return message;
     }
 
     public void proposer() {
