@@ -70,7 +70,6 @@ public class Panneau extends JPanel {
             g.setFont(font2);
             g.setColor(Color.BLACK);
             this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, this.enigme);
-
             g.setFont(font);
             this.drawMiddle(this.getWidth()/2, 30, g, "Enigme Rapide");
             g.setFont(new Font("Impact", Font.PLAIN, 48));

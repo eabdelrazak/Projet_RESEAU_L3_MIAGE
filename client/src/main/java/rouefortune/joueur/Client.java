@@ -63,27 +63,27 @@ public class Client {
                         dos.writeUTF(creerMessageJsonObject(Messages.NOM, joueur.getNomJoueur()));
                         break;
                     case Messages.BEGIN:
-                        System.out.println(this.message.getContenu());
                         break;
                     case Messages.DEBUT_ENIGME_RAPIDE:
-                        System.out.println(this.message.getContenu());
                         this.fenetrePrincipal.setPanState(Panneau.ENIGME_RAPIDE);
                         this.fenetrePrincipal.pan.buzzer.setVisible(true);
                         this.fenetrePrincipal.pan.theme = this.message.getContenu();
                         this.fenetrePrincipal.repaint();
                         break;
-                    case Messages.ENIGME_RAPIDE: case Messages.ENIGME_NORMALE:
-                        System.out.println(this.message.getContenu());
+                    case Messages.ENIGME_RAPIDE:
                         this.fenetrePrincipal.pan.enigme = this.message.getContenu();
                         this.fenetrePrincipal.repaint();
                         break;
+                    case Messages.DEBUT_ENIGME_NORMALE:
+
+                        break;
+                    case Messages.ENIGME_NORMALE:
+                        break;
                     case Messages.FAIRE_PROPOSITION:
-                        System.out.println(this.message.getContenu());
                         this.fenetrePrincipal.pan.buzzer.setVisible(false);
                         this.fenetrePrincipal.pan.textfield.setVisible(true);
                         break;
                     case Messages.MOT_TROUVEE:
-                        System.out.println(this.message.getContenu());
                         if(this.message.getContenu().split(";")[0].equals("rapide")){
                             if(this.message.getContenu().split(";")[1].equals(this.joueur.getNomJoueur())) {
                                 joueur.addCagnotteManche(1, 500);
