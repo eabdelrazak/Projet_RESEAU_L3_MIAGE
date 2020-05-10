@@ -78,7 +78,7 @@ public class ClientHandler implements Runnable {
                                     dos.writeUTF(creerMessageJsonObject(Messages.INCORECT_LETTRE,"Lettre incorrecte ou deja deviner"));
                                 }
                             }else{
-                                if(this.inventaire.getCagnotePartie() >= 200){
+                                if(this.inventaire.getCagnoteManche() >= 200){
                                     if(this.serveur.getPartie().getLaManche().getLeTableau().presenceLettre(laLettre.charAt(0))){
                                         this.inventaire.addCagnoteManche(1, -200);
                                         int nombreTrouver = this.serveur.getPartie().getLaManche().getLeTableau().chercherLettre(laLettre.charAt(0));
