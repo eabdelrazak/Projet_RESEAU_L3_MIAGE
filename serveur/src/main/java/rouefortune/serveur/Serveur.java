@@ -145,18 +145,10 @@ public class Serveur {
     public void terminerEnigmeRapide(ClientHandler gagnant){
         System.out.println(gagnant.getInventaire().getNomJoueur()+" a trouvée le mot !!");
         for(ClientHandler client : clientHandlers){
-            if(client.equals(gagnant)){
-                try {
-                    client.getDos().writeUTF(creerMessageJsonObject(Messages.MOT_TROUVEE, "Enigme rapide"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }else{
-                try {
-                    client.getDos().writeUTF(creerMessageJsonObject(Messages.MOT_TROUVEE_AUTRE, "Enigme rapide"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            try {
+                client.getDos().writeUTF(creerMessageJsonObject(Messages.MOT_TROUVEE, "rapide;"+gagnant.getInventaire().getNomJoueur()));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 

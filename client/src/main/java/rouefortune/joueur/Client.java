@@ -84,16 +84,20 @@ public class Client {
                         break;
                     case Messages.MOT_TROUVEE:
                         System.out.println(this.message.getContenu());
-                        if(this.message.getContenu().equals("Enigme rapide")){
-                            joueur.addCagnotteManche(1,500);
+                        if(this.message.getContenu().split(";")[0].equals("rapide")){
+                            if(this.message.getContenu().split(";")[1].equals(this.joueur.getNomJoueur())) {
+                                joueur.addCagnotteManche(1, 500);
+                            }
                             this.fenetrePrincipal.pan.textfield.setVisible(false);
+                            this.fenetrePrincipal.pan.gagnant = this.message.getContenu().split(";")[1];
                             this.fenetrePrincipal.setPanState(Panneau.FIN_ENIGME_RAPIDE);
                             this.fenetrePrincipal.repaint();
                         }else{
-                            String tab[] = this.message.getContenu().split(";");
+                            String[] tab = this.message.getContenu().split(";");
                             joueur.addCagnotteManche(joueur.getBonus(),Integer.parseInt(tab[1]));
                         }
                         break;
+                    case Messages.MOT_TROUVEE_AUTRE:
                     case Messages.RESULTAT_ROUE:
                         System.out.println("En tournant la roue, vous avez eu : " + this.message.getContenu());
                         if(this.message.getContenu().equals("Banqueroute")) {

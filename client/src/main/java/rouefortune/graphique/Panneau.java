@@ -23,6 +23,7 @@ public class Panneau extends JPanel {
     public int state = Panneau.CONNEXION;
     public String theme = "";
     public PropositionTexte textfield;
+    public String gagnant;
 
     public void init(Joueur joueur)  {
         this.joueur = joueur;
@@ -75,9 +76,11 @@ public class Panneau extends JPanel {
             g.setFont(new Font("Impact", Font.PLAIN, 48));
             this.drawMiddle(this.getWidth()/2, 90, g, "Theme: "+this.theme);
         }else if(state == Panneau.FIN_ENIGME_RAPIDE){
+            font = new Font("Impact", Font.PLAIN, 48);
             g.setFont(font);
             g.setColor(Color.BLACK);
             this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, "Fin de l'enigme rapide !");
+            this.drawMiddle(this.getWidth()/2, this.getHeight()/2+50, g, this.gagnant+" gagne l'enigme rapide !");
         }else if(state == Panneau.ENIGME_NORMALE){
 
         }
