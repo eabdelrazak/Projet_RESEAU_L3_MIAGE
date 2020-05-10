@@ -2,6 +2,7 @@ package rouefortune.serveur;
 
 import rouefortune.Messages;
 import rouefortune.moteur.EnigmeRapide;
+import rouefortune.moteur.Roue;
 import rouefortune.moteur.TableauAffichage;
 
 import java.io.IOException;
@@ -17,14 +18,16 @@ public class Manche {
     public ClientHandler joueurDebutant;
     private Serveur serveur;
     private TableauAffichage leTableau;
+    private Roue laRoue;
     private EnigmeRapide enigmeRapide;
     private Random rand;
 
 
-    public Manche(int i, Serveur serveur, TableauAffichage tableau) {
+    public Manche(int i, Serveur serveur, TableauAffichage tableau, Roue roue) {
         this.numeroManche = i;
         this.serveur = serveur;
         this.leTableau = tableau;
+        this.laRoue = roue;
         this.joueurDebutant = null;
         this.rand = new Random();
     }
@@ -106,8 +109,8 @@ public class Manche {
         }*/
     }
 
-    public void tournerRoue(int i){
-        //this.lesJoueurs[i].tournerLaRoue();
+    public String tournerRoue(){
+        return this.laRoue.tourner();
     }
 
     public EnigmeRapide getEnigmeRapide() {

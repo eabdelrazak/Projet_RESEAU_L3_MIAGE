@@ -73,7 +73,7 @@ public class ClientHandler implements Runnable {
                             if(!(laLettre.charAt(0) != 'a' && laLettre.charAt(0) != 'i' && laLettre.charAt(0) != 'u' && laLettre.charAt(0) != 'e' && laLettre.charAt(0) != 'o' && laLettre.charAt(0) != 'y')){
                                 if(this.serveur.getPartie().getLaManche().getLeTableau().presenceLettre(laLettre.charAt(0))){
                                     int nombreTrouver = this.serveur.getPartie().getLaManche().getLeTableau().chercherLettre(laLettre.charAt(0));
-                                    this.inventaire.addCagnoteManche(this.inventaire.bonus, nombreTrouver);
+                                    this.inventaire.addCagnoteManche(this.inventaire.getBonus(), nombreTrouver);
                                 }else{
                                     dos.writeUTF(creerMessageJsonObject(Messages.INCORECT_LETTRE,"Lettre incorrecte ou deja deviner"));
                                 }
@@ -82,7 +82,7 @@ public class ClientHandler implements Runnable {
                                     if(this.serveur.getPartie().getLaManche().getLeTableau().presenceLettre(laLettre.charAt(0))){
                                         this.inventaire.addCagnoteManche(1, -200);
                                         int nombreTrouver = this.serveur.getPartie().getLaManche().getLeTableau().chercherLettre(laLettre.charAt(0));
-                                        this.inventaire.addCagnoteManche(this.inventaire.bonus, nombreTrouver);
+                                        this.inventaire.addCagnoteManche(this.inventaire.getBonus(), nombreTrouver);
                                     }else{
                                         dos.writeUTF(creerMessageJsonObject(Messages.INCORECT_LETTRE,"Lettre incorrecte ou deja deviner"));
                                     }
@@ -90,6 +90,17 @@ public class ClientHandler implements Runnable {
                             }
                         }else{
                             dos.writeUTF(creerMessageJsonObject(Messages.REFUSER_LETTRE,"Vous devez envoyer une lettre"));
+                        }
+                        break;
+                    case Messages.TOURNER_ROUE:
+                        String resultatRoue = this.serveur.getPartie().getLaManche().tournerRoue();
+                        if(resultatRoue.equals("Banqueroute")){
+                            this.inventaire.setBonus(0);
+                            this.inventaire.setCagnoteManche(0);
+                            dos.writeUTF(creerMessageJsonObject(Messages.RESULTAT_ROUE,resultatRoue));
+                        }else{
+                            this.inventaire.setBonus(Integer.parseInt(resultatRoue));
+                            dos.writeUTF(creerMessageJsonObject(Messages.RESULTAT_ROUE,resultatRoue));
                         }
                         break;
                     case Messages.QUITTER:
