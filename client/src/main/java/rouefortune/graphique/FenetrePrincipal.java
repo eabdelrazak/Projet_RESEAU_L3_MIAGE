@@ -16,6 +16,7 @@ public class FenetrePrincipal extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.pan = new Panneau();
+        pan.setLayout(null);
         pan.init(joueur);
 
         this.setContentPane(this.pan);
