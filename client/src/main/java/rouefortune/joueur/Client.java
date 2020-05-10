@@ -44,13 +44,13 @@ public class Client {
             // obtaining input and out streams
             DataInputStream dis = new DataInputStream(s.getInputStream());
             DataOutputStream dos = new DataOutputStream(s.getOutputStream());
-            Boolean disconnect = false;
-            String toSend = "";
+            boolean disconnect = false;
+            String toSend;
 
 
             // the following loop performs the exchange of
             // information between client and client handler
-            while (true) {
+            do {
                 this.message = receptionMessage(dis.readUTF());
 
                 switch (this.message.getMessage()) {
@@ -94,11 +94,7 @@ public class Client {
                     default:
                 }
 
-                if (disconnect) {
-                    break;
-                }
-
-            }
+            } while (!disconnect);
             //closing resources
             dis.close();
             dos.close();
@@ -146,5 +142,14 @@ public class Client {
 
     public Socket getSocket() {
         return s;
+    }
+
+    public void sendBuzz() {
+        try {
+            DataOutputStream dos = new DataOutputStream(this.s.getOutputStream());
+            dos.writeUTF(this.creerMessageJsonObject(Messages.BUZZ, null));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }
