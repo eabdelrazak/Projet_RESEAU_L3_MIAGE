@@ -98,6 +98,8 @@ public class ClientHandler implements Runnable {
                             this.inventaire.setBonus(0);
                             this.inventaire.setCagnoteManche(0);
                             dos.writeUTF(creerMessageJsonObject(Messages.RESULTAT_ROUE,resultatRoue));
+                        }else if(resultatRoue.equals("Passe")){
+                            this.serveur.getPartie().getLaManche().passe();
                         }else{
                             this.inventaire.setBonus(Integer.parseInt(resultatRoue));
                             dos.writeUTF(creerMessageJsonObject(Messages.RESULTAT_ROUE,resultatRoue));

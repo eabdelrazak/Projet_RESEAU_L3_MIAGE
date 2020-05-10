@@ -109,6 +109,10 @@ public class Manche {
         }*/
     }
 
+    public void passe(){
+
+    }
+
     public String tournerRoue(){
         return this.laRoue.tourner();
     }
@@ -124,4 +128,5 @@ public class Manche {
     public TableauAffichage getLeTableau() {
         return leTableau;
     }
+
 }
