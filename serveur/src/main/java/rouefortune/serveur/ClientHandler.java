@@ -100,6 +100,7 @@ public class ClientHandler implements Runnable {
                             dos.writeUTF(creerMessageJsonObject(Messages.RESULTAT_ROUE,resultatRoue));
                         }else if(resultatRoue.equals("Passe")){
                             this.serveur.getPartie().getLaManche().passe();
+                            dos.writeUTF(creerMessageJsonObject(Messages.RESULTAT_ROUE,resultatRoue));
                         }else{
                             this.inventaire.setBonus(Integer.parseInt(resultatRoue));
                             dos.writeUTF(creerMessageJsonObject(Messages.RESULTAT_ROUE,resultatRoue));
