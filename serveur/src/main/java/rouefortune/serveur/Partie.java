@@ -22,7 +22,7 @@ public class Partie {
     }
 
     public void commencer(){
-        this.laManche = new Manche(1, this.serveur, leTableau);
+        this.laManche = new Manche(1, this.serveur, this.leTableau, this.laRoue);
         this.laManche.commencerManche();
     }
 
