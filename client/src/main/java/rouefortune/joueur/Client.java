@@ -66,14 +66,12 @@ public class Client {
                     case Messages.NOM:
                         System.out.println(this.message.getContenu());
                         break;
-                    case Messages.ENIGME_RAPIDE:
+                    case Messages.ENIGME_RAPIDE: case Messages.ENIGME_NORMALE:
                         System.out.println(this.message.getContenu());
                         if (this.fenetrePrincipal.getPanState() == Panneau.CONNECTED) {
                             this.fenetrePrincipal.pan.enigme = this.message.getContenu();
                             this.fenetrePrincipal.repaint();
                         }
-                        break;
-                    case Messages.ENIGME_NORMALE:
                         break;
                     case Messages.FAIRE_PROPOSITION:
                         System.out.println(this.message.getContenu());
@@ -82,6 +80,23 @@ public class Client {
                         break;
                     case Messages.MOT_TROUVEE:
                         System.out.println(this.message.getContenu());
+                        if(this.message.getContenu().equals("Enigme rapide")){
+                            joueur.addCagnotteManche(1,500);
+                        }else{
+                            String tab[] = this.message.getContenu().split(";");
+                            joueur.addCagnotteManche(joueur.getBonus(),Integer.parseInt(tab[1]));
+                        }
+                        break;
+                    case Messages.RESULTAT_ROUE:
+                        System.out.println("En tournant la roue, vous avez eu : " + this.message.getContenu());
+                        if(this.message.getContenu().equals("Banqueroute")) {
+                            joueur.setBonus(0);
+                            joueur.setCagnotteManche(0);
+                        }else if(this.message.getContenu().equals("Passe")){
+                            //Afficher dans IHM que le joueur passe son tour.
+                        }else{
+                            joueur.setBonus(Integer.parseInt(this.message.getContenu()));
+                        }
                         break;
                     case Messages.REPRENDRE:
                         System.out.println(this.message.getContenu());

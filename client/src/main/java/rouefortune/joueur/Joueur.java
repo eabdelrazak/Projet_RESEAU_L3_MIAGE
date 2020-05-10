@@ -8,17 +8,19 @@ public class Joueur {
 
     private Client client;
     private String nomJoueur;
-    private int cagnotePartie;
-    private int cagnoteManche;
+    private int cagnottePartie;
+    private int cagnotteManche;
     private String proposition;
+    private int bonus;
 
 
     public Joueur(String nom, Client client){
         this.nomJoueur = nom;
         this.client = client;
-        this.cagnotePartie = 0;
-        this.cagnoteManche = 0;
+        this.cagnottePartie = 0;
+        this.cagnotteManche = 0;
         this.proposition = " ";
+        this.bonus = 0;
     }
 
     /**
@@ -51,6 +53,26 @@ public class Joueur {
 
     public String getNomJoueur() {
         return nomJoueur;
+    }
+
+    public void addCagnottePartie(int somme){
+        this.cagnottePartie += somme;
+    }
+
+    public void addCagnotteManche(int bonus, int somme){
+        this.cagnotteManche += (somme*this.bonus);
+    }
+
+    public void setCagnotteManche(int cagnotteManche) {
+        this.cagnotteManche = cagnotteManche;
+    }
+
+    public void setBonus(int bonus) {
+        this.bonus = bonus;
+    }
+
+    public int getBonus() {
+        return bonus;
     }
 
     public void setNomJoueur(String nomJoueur) {

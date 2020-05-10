@@ -60,7 +60,7 @@ public class ClientHandler implements Runnable {
                     case Messages.PROPOSER_REPONSE:
                         if(this.messageReceived.getContenu().equals(this.getInventaire().getMotADeviner())){
                             System.out.println(this.getInventaire().getNomJoueur()+" a trouvée le mot !!");
-                            dos.writeUTF(creerMessageJsonObject(Messages.MOT_TROUVEE, "Vous avez gagné !"));
+                            dos.writeUTF(creerMessageJsonObject(Messages.MOT_TROUVEE, "Enigme rapide"));
                             this.getInventaire().addCagnoteManche(1,500);
                             this.serveur.getPartie().getLaManche().setJoueurDebutant(this);
                         }else{
@@ -73,6 +73,7 @@ public class ClientHandler implements Runnable {
                             if(!(laLettre.charAt(0) != 'a' && laLettre.charAt(0) != 'i' && laLettre.charAt(0) != 'u' && laLettre.charAt(0) != 'e' && laLettre.charAt(0) != 'o' && laLettre.charAt(0) != 'y')){
                                 if(this.serveur.getPartie().getLaManche().getLeTableau().presenceLettre(laLettre.charAt(0))){
                                     int nombreTrouver = this.serveur.getPartie().getLaManche().getLeTableau().chercherLettre(laLettre.charAt(0));
+                                    dos.writeUTF(creerMessageJsonObject(Messages.MOT_TROUVEE, "Enigme normale;"+nombreTrouver));
                                     this.inventaire.addCagnoteManche(this.inventaire.getBonus(), nombreTrouver);
                                 }else{
                                     dos.writeUTF(creerMessageJsonObject(Messages.INCORECT_LETTRE,"Lettre incorrecte ou deja deviner"));
@@ -82,6 +83,7 @@ public class ClientHandler implements Runnable {
                                     if(this.serveur.getPartie().getLaManche().getLeTableau().presenceLettre(laLettre.charAt(0))){
                                         this.inventaire.addCagnoteManche(1, -200);
                                         int nombreTrouver = this.serveur.getPartie().getLaManche().getLeTableau().chercherLettre(laLettre.charAt(0));
+                                        dos.writeUTF(creerMessageJsonObject(Messages.MOT_TROUVEE, "Enigme normale;"+nombreTrouver));
                                         this.inventaire.addCagnoteManche(this.inventaire.getBonus(), nombreTrouver);
                                     }else{
                                         dos.writeUTF(creerMessageJsonObject(Messages.INCORECT_LETTRE,"Lettre incorrecte ou deja deviner"));
