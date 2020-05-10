@@ -17,7 +17,7 @@ public class EnigmeRapide extends Enigme implements Runnable {
         super(tableau);
         this.serveur = serveur;
         this.threadLettre = new Thread(this);
-        this.start();
+        this.threadLettre.start();
         this.serveur.commencerEnigme(this.leTableau, Messages.DEBUT_ENIGME_RAPIDE);
     }
 

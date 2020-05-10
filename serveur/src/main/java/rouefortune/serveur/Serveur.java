@@ -22,23 +22,26 @@ public class Serveur {
     Thread [] clientThreads;
     private int nombreDeJoueur = 0;
     private Partie partie = null;
+    private ServerSocket serverSocket;
 
     public Serveur(int nombreDeJoueur) throws IOException {
 
         /* Le serveur ecoute sur le port 5056 */
-        ServerSocket serverSocket = new ServerSocket(5056);
+        setServerSocket(new ServerSocket(5056));
         /* Creation d'une liste de thread pour la gestion de chaque client */
         this.clientHandlers = new ArrayList<>();
         /* Creation de la liste de ce qui ont buzz */
         setNombreDeJoueur(nombreDeJoueur);
 
-        System.out.println("Attente des joueurs");
+        connexionClient(serverSocket);
 
-        /* Boucle infini pour recupérer les requetes de connexion client */
+        /*System.out.println("Attente des joueurs");
+
+        *//* Boucle infini pour recupérer les requetes de connexion client *//*
         while (infiniteLoop) {
             Socket s = null;
             try {
-                /* objet socket permettant d'écouter qu'un client fasse une demande de connexion */
+                *//* objet socket permettant d'écouter qu'un client fasse une demande de connexion *//*
                     s = serverSocket.accept();
 
                 System.out.println("Un nouveau joueur s'est connecté : " + s);
@@ -57,9 +60,7 @@ public class Serveur {
                 s.close();
                 e.printStackTrace();
             }
-        }
-        System.out.println("DEBUT");
-        this.debutPartie();
+        }*/
     }
 
     public synchronized void ajoutClient(Socket socket, DataInputStream dis, DataOutputStream dos, int nb, Serveur servP){
@@ -205,6 +206,11 @@ public class Serveur {
         }
     }
 
+    public void mettreFinJeu(){
+        if(this.getPartie().getLaManche().getEnigmeRapide().threadLettre.isAlive())
+            this.getPartie().getLaManche().terminerEnigmeRapide();
+    }
+
     public void enleverEnigme(int random_un) {
         String[][] newtab = new String[this.tabEnigmes.length-1][2];
         int j=0;
@@ -215,5 +221,70 @@ public class Serveur {
             }
         }
         this.tabEnigmes = newtab;
+    }
+
+    public void deconnecterAll(){
+        for(ClientHandler client : this.getClientHandlers()){
+            try {
+                client.getDos().writeUTF(creerMessageJsonObject(Messages.DISCONNECT, "La partie prend fin car un joueur a quitté la partie !!!"));
+                client.setInfiniteLoop(false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        getClientHandlers().clear();
+        connexionClient(getServerSocket());
+    }
+
+    public void connexionClient(ServerSocket serverSocket){
+        setInfiniteLoop(true);
+        System.out.println("Attente des joueurs");
+
+        /* Boucle infini pour recupérer les requetes de connexion client */
+        while (isInfiniteLoop()) {
+            Socket s = null;
+            try {
+                /* objet socket permettant d'écouter qu'un client fasse une demande de connexion */
+                s = serverSocket.accept();
+
+                System.out.println("Un nouveau joueur s'est connecté : " + s);
+
+                DataInputStream dis = new DataInputStream(s.getInputStream());
+                DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+
+                ajoutClient(s, dis, dos, nombreDeJoueur, this);
+
+                if(clientHandlers.size() == nombreDeJoueur){
+                    infiniteLoop = false;
+                }
+
+            } catch (Exception e){
+                assert s != null;
+                try {
+                    s.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                e.printStackTrace();
+            }
+        }
+        System.out.println("DEBUT");
+        this.debutPartie();
+    }
+
+    public ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
+    public void setServerSocket(ServerSocket serverSocket) {
+        this.serverSocket = serverSocket;
+    }
+
+    public boolean isInfiniteLoop() {
+        return infiniteLoop;
+    }
+
+    public void setInfiniteLoop(boolean infiniteLoop) {
+        this.infiniteLoop = infiniteLoop;
     }
 }

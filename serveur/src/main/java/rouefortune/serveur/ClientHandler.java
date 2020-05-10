@@ -18,6 +18,7 @@ public class ClientHandler implements Runnable {
     final Socket s;
     private Inventaire inventaire;
     private volatile Serveur serveur;
+    private boolean infiniteLoop = true;
 
     public ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos, Serveur serveurP) {
         this.s = s;
@@ -34,10 +35,11 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (isInfiniteLoop()) {
             try {
                 // receive the answer from client
-                if(s.isClosed()){
+                if(getS().isClosed()){
+                    System.out.println("TEST DECO "+this.getInventaire().getNomJoueur());
                     break;
                 }
                 Echange messageReceived = receptionMessage(dis.readUTF());
@@ -104,17 +106,18 @@ public class ClientHandler implements Runnable {
                         }
                         break;
                     case Messages.QUITTER:
-                        System.out.println("Joueur " + this.s + " souhaites quitter...");
-                        System.out.println("Fermeture de la connexion.");
-                        this.s.close();
-                        System.out.println("Connection closed");
+                        System.out.println("Joueur " + this.s + " a decidé de quitter la partie...");
+                        System.out.println("Fin de la partie. Fermeture de la connexion des joueurs.");
+                        //this.s.close();
+                        this.serveur.mettreFinJeu();
+                        this.serveur.deconnecterAll();
                         break;
                     default:
 
                         break;
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 break;
             }
         }
@@ -158,12 +161,25 @@ public class ClientHandler implements Runnable {
         return s;
     }
 
+
+    public Socket getS() {
+        return s;
+    }
+
     public DataOutputStream getDos() {
         return dos;
     }
 
     public Inventaire getInventaire() {
         return inventaire;
+    }
+
+    public boolean isInfiniteLoop() {
+        return infiniteLoop;
+    }
+
+    public void setInfiniteLoop(boolean infiniteLoop) {
+        this.infiniteLoop = infiniteLoop;
     }
 }
 

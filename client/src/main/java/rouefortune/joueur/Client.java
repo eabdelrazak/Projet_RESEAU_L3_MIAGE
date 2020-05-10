@@ -24,8 +24,7 @@ public class Client {
     private Echange message;
     private Joueur joueur;
     private FenetrePrincipal fenetrePrincipal;
-
-
+    private boolean fermerFenetre = false;
 
     /**
      * Fonction permettant la connection d'un joueur au serveur.
@@ -48,12 +47,23 @@ public class Client {
             boolean disconnect = false;
             String toSend;
 
+            this.fenetrePrincipal.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                    System.out.println("TEST");
+                    try {
+                        dos.writeUTF(creerMessageJsonObject(Messages.QUITTER, null));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
 
             // the following loop performs the exchange of
             // information between client and client handler
             do {
                 this.message = receptionMessage(dis.readUTF());
-                System.out.println(message.getMessage()+"/"+message.getContenu());
+                System.out.println(message.getMessage() + "/" + message.getContenu());
 
                 switch (this.message.getMessage()) {
                     case Messages.CONNEXION_REUSSI:
@@ -84,28 +94,28 @@ public class Client {
                         this.fenetrePrincipal.pan.textfield.setVisible(true);
                         break;
                     case Messages.MOT_TROUVEE:
-                        if(this.message.getContenu().split(";")[0].equals("rapide")){
-                            if(this.message.getContenu().split(";")[1].equals(this.joueur.getNomJoueur())) {
+                        if (this.message.getContenu().split(";")[0].equals("rapide")) {
+                            if (this.message.getContenu().split(";")[1].equals(this.joueur.getNomJoueur())) {
                                 joueur.addCagnotteManche(1, 500);
                             }
                             this.fenetrePrincipal.pan.textfield.setVisible(false);
                             this.fenetrePrincipal.pan.gagnant = this.message.getContenu().split(";")[1];
                             this.fenetrePrincipal.setPanState(Panneau.FIN_ENIGME_RAPIDE);
                             this.fenetrePrincipal.repaint();
-                        }else{
+                        } else {
                             String[] tab = this.message.getContenu().split(";");
-                            joueur.addCagnotteManche(joueur.getBonus(),Integer.parseInt(tab[1]));
+                            joueur.addCagnotteManche(joueur.getBonus(), Integer.parseInt(tab[1]));
                         }
                         break;
                     case Messages.MOT_TROUVEE_AUTRE:
                     case Messages.RESULTAT_ROUE:
                         System.out.println("En tournant la roue, vous avez eu : " + this.message.getContenu());
-                        if(this.message.getContenu().equals("Banqueroute")) {
+                        if (this.message.getContenu().equals("Banqueroute")) {
                             joueur.setBonus(0);
                             joueur.setCagnotteManche(0);
-                        }else if(this.message.getContenu().equals("Passe")){
+                        } else if (this.message.getContenu().equals("Passe")) {
                             //Afficher dans IHM que le joueur passe son tour.
-                        }else{
+                        } else {
                             joueur.setBonus(Integer.parseInt(this.message.getContenu()));
                         }
                         break;
@@ -118,6 +128,10 @@ public class Client {
                         this.fenetrePrincipal.pan.buzzer.setVisible(false);
                         break;
                     case Messages.DISCONNECT:
+                        System.out.println("Connection closed");
+                        this.s.close();
+                        System.exit(0);
+                        //Runtime.getRuntime().exit(0);
                         disconnect = true;
                         break;
                     default:
@@ -131,7 +145,6 @@ public class Client {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public Echange receptionMessage(String str) {
@@ -190,4 +203,7 @@ public class Client {
             ex.printStackTrace();
         }
     }
+
+
+
 }

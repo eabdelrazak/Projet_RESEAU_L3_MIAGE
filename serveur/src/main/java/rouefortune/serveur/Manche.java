@@ -117,4 +117,7 @@ public class Manche {
         return leTableau;
     }
 
+    public EnigmeRapide getEnigmeRapide() {
+        return enigmeRapide;
+    }
 }
