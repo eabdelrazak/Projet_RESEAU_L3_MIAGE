@@ -4,9 +4,13 @@ public class Messages {
     /* MESSAGES SERVEUR → CLIENTS */
     // Le serveur dit au client qu'il s'est connecte
     public static final String CONNEXION_REUSSI="serveurconnexionreussi";
-    // Le serveur commence une enigme rapide
+    //Le serveur signale le début de l'enigme rapide
+    public static final String DEBUT_ENIGME_RAPIDE = "serveurdebutenigmerapide";
+    // Le serveur envoie une lettre d'une enigme rapide
     public static final String ENIGME_RAPIDE="serveurafficherenigmerapide";
-    // Le serveur commence une enigme normale
+    //Le serveur signale le début de l'enigme rapide
+    public static final String DEBUT_ENIGME_NORMALE = "serveurdebutenigmenormale";
+    // Le serveur evnoie une lettre d'une enigme normale
     public static final String ENIGME_NORMALE="serveurafficherenigmenormale";
     // Le serveur dit au client de se mettre en pause
     public static final String PAUSE="serveurpause";
@@ -15,21 +19,21 @@ public class Messages {
     //Le serveur dit au client qu'il peut se déconnecter
     public static final String DISCONNECT = "serveurdisconnect";
     // Le serveur demande une proposition
-    public static final String PROPOSER_REPONSE="clientproposerreponse";
+    public static final String PROPOSER_REPONSE="serveurproposerreponse";
     // Le serveur demande une proposition
-    public static final String BEGIN = "debut";
+    public static final String BEGIN = "serveurdebut";
     // Le serveur notifie le gagnant
-    public static final String MOT_TROUVEE = "vainqueur";
+    public static final String MOT_TROUVEE = "serveurvainqueur";
     // Le serveur notifie le gagnant
-    public static final String REPRENDRE = "reprendre";
+    public static final String REPRENDRE = "serveurreprendre";
     //Le serveur accepte la lettre proposer
-    public static final String CORRECT_LETTRE="correctlettre";
+    public static final String CORRECT_LETTRE="serveurcorrectlettre";
     //Le serveur refuse la lettre proposer
-    public static final String REFUSER_LETTRE="refuserlettre";
+    public static final String REFUSER_LETTRE="serveurrefuserlettre";
     //Le serveur notifie le client que sa lettre n'est pas presente
-    public static final String INCORECT_LETTRE="incorectlettre";
+    public static final String INCORECT_LETTRE="serveurincorectlettre";
     //Le serveur renvoie le resulat de la roue
-    public static final String RESULTAT_ROUE="resultatroue";
+    public static final String RESULTAT_ROUE="serveurresultatroue";
 
     /* MESSAGE CLIENT → SERVEUR */
     // Le client buzz
@@ -43,7 +47,5 @@ public class Messages {
     // Le client souhaite quitter le jeu
     public static final String QUITTER="clientquitte";
 
-    public static final String NOM = "nomduclient";
-
-
+    public static final String NOM = "clientnomduclient";
 }

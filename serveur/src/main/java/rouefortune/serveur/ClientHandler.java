@@ -17,7 +17,7 @@ public class ClientHandler implements Runnable {
     final DataOutputStream dos;
     final Socket s;
     private Inventaire inventaire;
-    private Serveur serveur;
+    private volatile Serveur serveur;
     private Echange messageReceived;
     private boolean buzz = false;
 
@@ -27,6 +27,11 @@ public class ClientHandler implements Runnable {
         this.dos = dos;
         this.inventaire = new Inventaire();
         this.serveur = serveurP;
+        try {
+            dos.writeUTF(creerMessageJsonObject(Messages.CONNEXION_REUSSI, null));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -52,13 +57,12 @@ public class ClientHandler implements Runnable {
                         dos.writeUTF(creerMessageJsonObject(Messages.BEGIN, "Soyez prêt la partie va commencer"));
                         break;
                     case Messages.BUZZ:
-                        this.serveur.getClientQuiABuzz().add(this);
                         System.out.println("MOT A DEVINER →"+this.getInventaire().getMotADeviner());
-                        this.serveur.getPartie().getLaManche().pauseEnigmeRapide();
+                        this.serveur.mettreEnPause(this);
                         //dos.writeUTF(creerMessageJsonObject(Messages.PROPOSER_REPONSE,null));
                         break;
                     case Messages.PROPOSER_REPONSE:
-                        if(this.messageReceived.getContenu().equals(this.getInventaire().getMotADeviner())){
+                        if(this.messageReceived.getContenu().equalsIgnoreCase(this.getInventaire().getMotADeviner())){
                             System.out.println(this.getInventaire().getNomJoueur()+" a trouvée le mot !!");
                             dos.writeUTF(creerMessageJsonObject(Messages.MOT_TROUVEE, "Enigme rapide"));
                             this.getInventaire().addCagnoteManche(1,500);
@@ -124,15 +128,15 @@ public class ClientHandler implements Runnable {
             }
         }
 
-       /* try
+       try
         {
             // closing resources
-            //this.dis.close();
-            //this.dos.close();
+            this.dis.close();
+            this.dos.close();
 
         }catch(IOException e){
             e.printStackTrace();
-        }*/
+        }
     }
 
     public Echange receptionMessage(String str){

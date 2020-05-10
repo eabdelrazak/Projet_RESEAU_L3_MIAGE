@@ -50,7 +50,6 @@ public class Serveur {
                 DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 
                 ajoutClient(s, dis, dos, nombreDeJoueur, this);
-                dos.writeUTF(creerMessageJsonObject(Messages.CONNEXION_REUSSI, null));
 
                 if(clientHandlers.size() == nombreDeJoueur){
                     infiniteLoop = false;
@@ -146,11 +145,24 @@ public class Serveur {
         this.clientQuiABuzz = clientQuiABuzz;
     }
 
-    public void envoyerEnigme(TableauAffichage tableau) {
-        System.out.println(tableau.AfficherEnigmeDeviner());
+    public void commencerEnigme(TableauAffichage tableau) {
         for (ClientHandler client : clientHandlers) {
             try {
                 client.getInventaire().setMotADeviner(tableau.getPropositionATrouver());
+                String message = creerMessageJsonObject(Messages.DEBUT_ENIGME_RAPIDE, tableau.getTheme());
+                client.getDos().writeUTF(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void envoyerEnigme(TableauAffichage tableau) {
+
+        for (ClientHandler client : clientHandlers) {
+            try {
+                System.out.println(client.getInventaire().getNomJoueur());
+                System.out.println(tableau.AfficherEnigmeDeviner());
                 String message = creerMessageJsonObject(Messages.ENIGME_RAPIDE, tableau.AfficherEnigmeDeviner());
                 client.getDos().writeUTF(message);
             } catch (IOException e) {
@@ -175,12 +187,15 @@ public class Serveur {
     }
 
     public void mettreEnPause(ClientHandler joueurQuiABuzz){
+        this.getPartie().getLaManche().pauseEnigmeRapide();
         for (ClientHandler client : clientHandlers) {
             String message;
-            if(client != joueurQuiABuzz){
+            if(!client.equals(joueurQuiABuzz)){
+                System.out.println(client.getInventaire().getNomJoueur()+" est en pause!");
                 message = creerMessageJsonObject(Messages.PAUSE, joueurQuiABuzz.getInventaire().getNomJoueur());
             }else{
-                message = creerMessageJsonObject(Messages.FAIRE_PROPOSITION, null);
+                System.out.println(client.getInventaire().getNomJoueur()+" fait une proposition!");
+                message = creerMessageJsonObject(Messages.FAIRE_PROPOSITION, "Vous êtes le premier à buzz, proposez un mot !");
             }
             try {
                 client.getDos().writeUTF(message);

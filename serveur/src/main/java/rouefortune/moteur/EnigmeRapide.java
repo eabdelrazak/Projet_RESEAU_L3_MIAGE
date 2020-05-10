@@ -20,13 +20,14 @@ public class EnigmeRapide extends Enigme implements Runnable {
         this.serveur = serveur;
         this.threadLettre = new Thread(this);
         this.start();
+        this.serveur.commencerEnigme(this.leTableau);
     }
 
     /**
      * Revele une lettre du tableau de l'enigme rapide/
      */
     public void revelerLettre() {
-        if(this.leTableau.getNombreCharacterRestant() > 1){
+        if(this.leTableau.getNombreCharacterRestant() > 1 && !paused){
             this.leTableau.revelerLettre();
             this.serveur.envoyerEnigme(this.leTableau);
         }

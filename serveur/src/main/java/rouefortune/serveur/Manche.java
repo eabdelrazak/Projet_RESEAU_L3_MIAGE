@@ -56,12 +56,6 @@ public class Manche {
      */
     public void pauseEnigmeRapide() {
         this.enigmeRapide.pause();
-        try {
-            this.serveur.getClientQuiABuzz().get(0).dos.writeUTF(this.serveur.creerMessageJsonObject(Messages.FAIRE_PROPOSITION, "Vous êtes le premier à buzz, proposez un mot !"));
-            this.serveur.getClientQuiABuzz().clear();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**

@@ -26,6 +26,7 @@ public class Client {
     private FenetrePrincipal fenetrePrincipal;
 
 
+
     /**
      * Fonction permettant la connection d'un joueur au serveur.
      *
@@ -52,11 +53,12 @@ public class Client {
             // information between client and client handler
             do {
                 this.message = receptionMessage(dis.readUTF());
+                System.out.println(message.getMessage()+"/"+message.getContenu());
 
                 switch (this.message.getMessage()) {
                     case Messages.CONNEXION_REUSSI:
                         System.out.println("Connected");
-                        this.fenetrePrincipal.setPanState(Panneau.CONNECTED);
+                        this.fenetrePrincipal.setPanState(Panneau.ENIGME_RAPIDE);
                         this.fenetrePrincipal.repaint();
                         dos.writeUTF(creerMessageJsonObject(Messages.NOM, joueur.getNomJoueur()));
                         break;
@@ -66,17 +68,21 @@ public class Client {
                     case Messages.NOM:
                         System.out.println(this.message.getContenu());
                         break;
+                    case Messages.DEBUT_ENIGME_RAPIDE:
+                        System.out.println(this.message.getContenu());
+                        this.fenetrePrincipal.pan.buzzer.setVisible(true);
+                        this.fenetrePrincipal.pan.theme = this.message.getContenu();
+                        this.fenetrePrincipal.repaint();
+                        break;
                     case Messages.ENIGME_RAPIDE: case Messages.ENIGME_NORMALE:
                         System.out.println(this.message.getContenu());
-                        if (this.fenetrePrincipal.getPanState() == Panneau.CONNECTED) {
-                            this.fenetrePrincipal.pan.enigme = this.message.getContenu();
-                            this.fenetrePrincipal.repaint();
-                        }
+                        this.fenetrePrincipal.pan.enigme = this.message.getContenu();
+                        this.fenetrePrincipal.repaint();
                         break;
                     case Messages.FAIRE_PROPOSITION:
                         System.out.println(this.message.getContenu());
-                        toSend = scn.nextLine();
-                        dos.writeUTF(creerMessageJsonObject(Messages.PROPOSER_REPONSE, toSend));
+                        this.fenetrePrincipal.pan.buzzer.setVisible(false);
+                        this.fenetrePrincipal.pan.textfield.setVisible(true);
                         break;
                     case Messages.MOT_TROUVEE:
                         System.out.println(this.message.getContenu());
@@ -99,9 +105,12 @@ public class Client {
                         }
                         break;
                     case Messages.REPRENDRE:
+                        this.fenetrePrincipal.pan.buzzer.setVisible(true);
+                        this.fenetrePrincipal.pan.textfield.setVisible(false);
                         System.out.println(this.message.getContenu());
                         break;
                     case Messages.PAUSE:
+                        this.fenetrePrincipal.pan.buzzer.setVisible(false);
                         break;
                     case Messages.DISCONNECT:
                         disconnect = true;
@@ -163,6 +172,15 @@ public class Client {
         try {
             DataOutputStream dos = new DataOutputStream(this.s.getOutputStream());
             dos.writeUTF(this.creerMessageJsonObject(Messages.BUZZ, null));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void sendProposition(String s) {
+        try {
+            DataOutputStream dos = new DataOutputStream(this.s.getOutputStream());
+            dos.writeUTF(this.creerMessageJsonObject(Messages.PROPOSER_REPONSE, s));
         } catch (IOException ex) {
             ex.printStackTrace();
         }

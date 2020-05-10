@@ -20,7 +20,7 @@ public class Buzzer extends JButton implements MouseListener {
         this.name = str;
         this.setBounds(350, 400, 100, 100);
         try {
-            img = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("buzzer.png")));
+            img = ImageIO.read(Objects.requireNonNull(Buzzer.class.getClassLoader().getResourceAsStream("buzzer.png")));
         } catch (IOException e){
             e.printStackTrace();
         }

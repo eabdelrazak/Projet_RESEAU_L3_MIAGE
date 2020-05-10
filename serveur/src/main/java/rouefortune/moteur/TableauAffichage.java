@@ -125,4 +125,8 @@ public class TableauAffichage {
     public String getPropositionATrouver() {
         return propositionATrouver;
     }
+
+    public String getTheme() {
+        return theme;
+    }
 }
