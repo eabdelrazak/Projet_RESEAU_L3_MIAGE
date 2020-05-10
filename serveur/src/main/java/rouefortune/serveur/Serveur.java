@@ -18,7 +18,7 @@ public class Serveur {
 
     public String[][] tabEnigmes;
     public boolean infiniteLoop = true;
-    private ArrayList<ClientHandler> clientHandlers, clientQuiABuzz;
+    private ArrayList<ClientHandler> clientHandlers;
     Thread [] clientThreads;
     private int nombreDeJoueur = 0;
     private Partie partie = null;
@@ -32,7 +32,6 @@ public class Serveur {
         /* Creation d'une liste de thread pour la gestion de chaque client */
         this.clientHandlers = new ArrayList<>();
         /* Creation de la liste de ce qui ont buzz */
-        this.clientQuiABuzz = new ArrayList<>();
         setNombreDeJoueur(nombreDeJoueur);
 
         System.out.println("Attente des joueurs");
@@ -135,14 +134,6 @@ public class Serveur {
 
     public void setNombreDeJoueur(int nombreDeJoueur) {
         this.nombreDeJoueur = nombreDeJoueur;
-    }
-
-    public ArrayList<ClientHandler> getClientQuiABuzz() {
-        return clientQuiABuzz;
-    }
-
-    public void setClientQuiABuzz(ArrayList<ClientHandler> clientQuiABuzz) {
-        this.clientQuiABuzz = clientQuiABuzz;
     }
 
     public void commencerEnigme(TableauAffichage tableau) {
