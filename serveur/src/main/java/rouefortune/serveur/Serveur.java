@@ -18,7 +18,7 @@ public class Serveur {
 
     public String[][] tabEnigmes;
     public boolean infiniteLoop = true;
-    private ArrayList<ClientHandler> clientHandlers;
+    private ArrayList<ClientHandler> clientHandlers, clientQuiABuzz;
     Thread [] clientThreads;
     private int nombreDeJoueur = 0;
     private Partie partie = null;
@@ -31,6 +31,8 @@ public class Serveur {
         ServerSocket serverSocket = new ServerSocket(5056);
         /* Creation d'une liste de thread pour la gestion de chaque client */
         this.clientHandlers = new ArrayList<>();
+        /* Creation de la liste de ce qui ont buzz */
+        this.clientQuiABuzz = new ArrayList<>();
         setNombreDeJoueur(nombreDeJoueur);
 
         System.out.println("Attente des joueurs");
@@ -51,10 +53,7 @@ public class Serveur {
                 dos.writeUTF(creerMessageJsonObject(Messages.CONNEXION_REUSSI, null));
 
                 if(clientHandlers.size() == nombreDeJoueur){
-                    //if(allIndentified()){
-                        infiniteLoop = false;
-                    //}
-
+                    infiniteLoop = false;
                 }
 
             } catch (Exception e){
@@ -139,11 +138,19 @@ public class Serveur {
         this.nombreDeJoueur = nombreDeJoueur;
     }
 
+    public ArrayList<ClientHandler> getClientQuiABuzz() {
+        return clientQuiABuzz;
+    }
+
+    public void setClientQuiABuzz(ArrayList<ClientHandler> clientQuiABuzz) {
+        this.clientQuiABuzz = clientQuiABuzz;
+    }
 
     public void envoyerEnigme(TableauAffichage tableau) {
         for (ClientHandler client : clientHandlers) {
             try {
                 System.out.println(tableau.AfficherEnigmeDeviner());
+                client.getInventaire().setMotADeviner(tableau.getPropositionATrouver());
                 String message = creerMessageJsonObject(Messages.ENIGME_RAPIDE, tableau.AfficherEnigmeDeviner());
                 client.getDos().writeUTF(message);
             } catch (IOException e) {

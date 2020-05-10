@@ -94,6 +94,14 @@ public class TableauAffichage {
         return s.toString();
     }
 
+    public String AfficherEnigmeADeviner(){
+        StringBuilder s = new StringBuilder();
+        for (char c : enigmeDeviner) {
+            s.append(c);
+        }
+        return s.toString();
+    }
+
     public int getNombreCharacterRestant() {
         int nbRestant = 0;
         for (char c : this.enigmeADeviner) {
@@ -102,5 +110,9 @@ public class TableauAffichage {
             }
         }
         return nbRestant;
+    }
+
+    public String getPropositionATrouver() {
+        return propositionATrouver;
     }
 }

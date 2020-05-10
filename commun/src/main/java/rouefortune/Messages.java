@@ -18,6 +18,10 @@ public class Messages {
     public static final String PROPOSER_REPONSE="clientproposerreponse";
     // Le serveur demande une proposition
     public static final String BEGIN = "debut";
+    // Le serveur notifie le gagnant
+    public static final String MOT_TROUVEE = "vainqueur";
+    // Le serveur notifie le gagnant
+    public static final String REPRENDRE = "reprendre";
 
     /* MESSAGE CLIENT → SERVEUR */
     // Le client buzz

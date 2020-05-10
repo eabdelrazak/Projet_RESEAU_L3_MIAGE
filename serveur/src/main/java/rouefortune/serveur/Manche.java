@@ -1,8 +1,10 @@
 package rouefortune.serveur;
 
+import rouefortune.Messages;
 import rouefortune.moteur.EnigmeRapide;
 import rouefortune.moteur.TableauAffichage;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
@@ -51,12 +53,25 @@ public class Manche {
      */
     public void pauseEnigmeRapide() {
         this.enigmeRapide.pause();
+        try {
+            this.serveur.getClientQuiABuzz().get(0).dos.writeUTF(this.serveur.creerMessageJsonObject(Messages.FAIRE_PROPOSITION, "Vous êtes le premier à buzz, proposez un mot !"));
+            this.serveur.getClientQuiABuzz().clear();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Remets en route la révélation des lettres  de l'enigme rapide.
      */
     public void repriseEnigmeRapide() {
+        for(ClientHandler client : this.serveur.getClientHandlers()){
+            try {
+                client.getDos().writeUTF(this.serveur.creerMessageJsonObject(Messages.REPRENDRE, "Le mot n'a pas été trouvée, ça reprend !!!"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         this.enigmeRapide.resume();
     }
 

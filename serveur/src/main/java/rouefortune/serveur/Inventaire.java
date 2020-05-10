@@ -1,7 +1,7 @@
 package rouefortune.serveur;
 
 public class Inventaire {
-    private String nomJoueur;
+    private String nomJoueur, motADeviner;
     private int cagnotePartie;
     private int cagnoteManche;
 
@@ -23,5 +23,13 @@ public class Inventaire {
 
     public void setNomJoueur(String nomJoueur) {
         this.nomJoueur = nomJoueur;
+    }
+
+    public String getMotADeviner() {
+        return motADeviner;
+    }
+
+    public void setMotADeviner(String motADeviner) {
+        this.motADeviner = motADeviner;
     }
 }

@@ -52,8 +52,19 @@ public class ClientHandler implements Runnable {
                         dos.writeUTF(creerMessageJsonObject(Messages.BEGIN, "Soyez prêt la partie va commencer"));
                         break;
                     case Messages.BUZZ:
+                        this.serveur.getClientQuiABuzz().add(this);
+                        System.out.println("MOT A DEVINER →"+this.getInventaire().getMotADeviner());
                         this.serveur.getPartie().getLaManche().pauseEnigmeRapide();
-                        dos.writeUTF(creerMessageJsonObject(Messages.PROPOSER_REPONSE,null));
+                        //dos.writeUTF(creerMessageJsonObject(Messages.PROPOSER_REPONSE,null));
+                        break;
+                    case Messages.PROPOSER_REPONSE:
+                        if(this.messageReceived.getContenu().equals(this.getInventaire().getMotADeviner())){
+                            System.out.println(this.getInventaire().getNomJoueur()+" a trouvée le mot !!");
+                            dos.writeUTF(creerMessageJsonObject(Messages.MOT_TROUVEE, "Vous avez gagné !"));
+                            this.getInventaire().addCagnoteManche(500);
+                        }else{
+                            this.serveur.getPartie().getLaManche().repriseEnigmeRapide();
+                        }
                         break;
                     case Messages.QUITTER:
                         System.out.println("Joueur " + this.s + " souhaites quitter...");

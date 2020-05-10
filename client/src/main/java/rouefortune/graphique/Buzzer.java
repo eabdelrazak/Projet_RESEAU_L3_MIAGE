@@ -41,7 +41,6 @@ public class Buzzer extends JButton implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         try {
-            DataInputStream dis = new DataInputStream(joueur.getClient().getSocket().getInputStream());
             DataOutputStream dos = new DataOutputStream(joueur.getClient().getSocket().getOutputStream());
             dos.writeUTF(joueur.getClient().creerMessageJsonObject(Messages.BUZZ, null));
         } catch (IOException ex) {
