@@ -4,17 +4,19 @@ public class Inventaire {
     private String nomJoueur, motADeviner;
     private int cagnotePartie;
     private int cagnoteManche;
+    public int bonus;
 
     public Inventaire(){
         this.cagnotePartie = 0;
         this.cagnoteManche = 0;
+        this.bonus = 0;
     }
 
     public void addCagnotePartie(int somme){
         this.cagnotePartie += somme;
     }
-    public void addCagnoteManche(int somme){
-        this.cagnoteManche += somme;
+    public void addCagnoteManche(int bonus, int somme){
+        this.cagnoteManche += (somme*this.bonus);
     }
 
     public String getNomJoueur(){
@@ -31,5 +33,13 @@ public class Inventaire {
 
     public void setMotADeviner(String motADeviner) {
         this.motADeviner = motADeviner;
+    }
+
+    public int getCagnotePartie() {
+        return cagnotePartie;
+    }
+
+    public int getCagnoteManche() {
+        return cagnoteManche;
     }
 }

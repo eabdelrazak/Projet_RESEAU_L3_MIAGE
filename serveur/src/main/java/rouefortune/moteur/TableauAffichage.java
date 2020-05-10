@@ -50,6 +50,16 @@ public class TableauAffichage {
         return nombreTrouver;
     }
 
+    public boolean presenceLettre(char lettre){
+        lettre = Character.toUpperCase(lettre);
+        for(int i = 0; i < this.longueurEnigme; i++){
+            if(this.enigmeADeviner[i] == lettre){
+                return true;
+            }
+        }
+        return false;
+    }
+
     //Methode pour révéler une lettre aux hasard (a appeler toute les X secondes)
     public void revelerLettre(){
         boolean lettreReveler = false;

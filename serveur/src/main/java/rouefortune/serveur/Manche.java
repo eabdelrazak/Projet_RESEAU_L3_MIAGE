@@ -14,7 +14,7 @@ public class Manche {
     private int numeroManche;
     /*private Inventaire[] lesJoueurs;*/
     private ArrayList<ClientHandler> clientHandlers;
-    public Socket joueurDebutant;
+    public ClientHandler joueurDebutant;
     private Serveur serveur;
     private TableauAffichage leTableau;
     private EnigmeRapide enigmeRapide;
@@ -85,15 +85,15 @@ public class Manche {
     /**
      * Permet a un joueur de faire une proposition a l'enigme rapide
      */
-    public void faireUnePropositionEnigmeRapide(ClientHandler client, String proposition){
+    public boolean faireUnePropositionEnigmeRapide(String proposition){
         this.pauseEnigmeRapide();
         boolean resultatProposition = this.enigmeRapide.faireProposition(proposition);
         if(!resultatProposition){
             repriseEnigmeRapide();
+            return false;
         }else{
             terminerEnigmeRapide();
-            this.joueurDebutant = client.s;
-            client.getInventaire().addCagnotePartie(500);
+            return true;
         }
     }
 
@@ -112,5 +112,13 @@ public class Manche {
 
     public EnigmeRapide getEnigmeRapide() {
         return enigmeRapide;
+    }
+
+    public void setJoueurDebutant(ClientHandler joueurDebutant) {
+        this.joueurDebutant = joueurDebutant;
+    }
+
+    public TableauAffichage getLeTableau() {
+        return leTableau;
     }
 }

@@ -61,9 +61,35 @@ public class ClientHandler implements Runnable {
                         if(this.messageReceived.getContenu().equals(this.getInventaire().getMotADeviner())){
                             System.out.println(this.getInventaire().getNomJoueur()+" a trouvée le mot !!");
                             dos.writeUTF(creerMessageJsonObject(Messages.MOT_TROUVEE, "Vous avez gagné !"));
-                            this.getInventaire().addCagnoteManche(500);
+                            this.getInventaire().addCagnoteManche(1,500);
+                            this.serveur.getPartie().getLaManche().setJoueurDebutant(this);
                         }else{
                             this.serveur.getPartie().getLaManche().repriseEnigmeRapide();
+                        }
+                        break;
+                    case Messages.PROPOSER_LETTRE:
+                        if(this.messageReceived.getMessage().length() == 1){
+                            String laLettre = this.messageReceived.getMessage();
+                            if(!(laLettre.charAt(0) != 'a' && laLettre.charAt(0) != 'i' && laLettre.charAt(0) != 'u' && laLettre.charAt(0) != 'e' && laLettre.charAt(0) != 'o' && laLettre.charAt(0) != 'y')){
+                                if(this.serveur.getPartie().getLaManche().getLeTableau().presenceLettre(laLettre.charAt(0))){
+                                    int nombreTrouver = this.serveur.getPartie().getLaManche().getLeTableau().chercherLettre(laLettre.charAt(0));
+                                    this.inventaire.addCagnoteManche(this.inventaire.bonus, nombreTrouver);
+                                }else{
+                                    dos.writeUTF(creerMessageJsonObject(Messages.INCORECT_LETTRE,"Lettre incorrecte ou deja deviner"));
+                                }
+                            }else{
+                                if(this.inventaire.getCagnotePartie() >= 200){
+                                    if(this.serveur.getPartie().getLaManche().getLeTableau().presenceLettre(laLettre.charAt(0))){
+                                        this.inventaire.addCagnoteManche(1, -200);
+                                        int nombreTrouver = this.serveur.getPartie().getLaManche().getLeTableau().chercherLettre(laLettre.charAt(0));
+                                        this.inventaire.addCagnoteManche(this.inventaire.bonus, nombreTrouver);
+                                    }else{
+                                        dos.writeUTF(creerMessageJsonObject(Messages.INCORECT_LETTRE,"Lettre incorrecte ou deja deviner"));
+                                    }
+                                }
+                            }
+                        }else{
+                            dos.writeUTF(creerMessageJsonObject(Messages.REFUSER_LETTRE,"Vous devez envoyer une lettre"));
                         }
                         break;
                     case Messages.QUITTER:

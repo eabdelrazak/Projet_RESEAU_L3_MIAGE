@@ -22,6 +22,14 @@ public class Messages {
     public static final String MOT_TROUVEE = "vainqueur";
     // Le serveur notifie le gagnant
     public static final String REPRENDRE = "reprendre";
+    //Le serveur accepte la lettre proposer
+    public static final String CORRECT_LETTRE="correctlettre";
+    //Le serveur refuse la lettre proposer
+    public static final String REFUSER_LETTRE="refuserlettre";
+    //Le serveur notifie le client que sa lettre n'est pas presente
+    public static final String INCORECT_LETTRE="incorectlettre";
+    //Le serveur renvoie le resulat de la roue
+    public static final String RESULTAT_ROUE="resultatroue";
 
     /* MESSAGE CLIENT → SERVEUR */
     // Le client buzz
