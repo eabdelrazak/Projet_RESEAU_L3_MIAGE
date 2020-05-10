@@ -16,7 +16,7 @@ public class Inventaire {
         this.cagnotePartie += somme;
     }
     public void addCagnoteManche(int bonus, int somme){
-        this.cagnoteManche += (somme*this.bonus);
+        this.cagnoteManche += (somme*bonus);
     }
 
     public String getNomJoueur(){

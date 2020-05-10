@@ -86,6 +86,9 @@ public class Client {
                         System.out.println(this.message.getContenu());
                         if(this.message.getContenu().equals("Enigme rapide")){
                             joueur.addCagnotteManche(1,500);
+                            this.fenetrePrincipal.pan.textfield.setVisible(false);
+                            this.fenetrePrincipal.setPanState(Panneau.FIN_ENIGME_RAPIDE);
+                            this.fenetrePrincipal.repaint();
                         }else{
                             String tab[] = this.message.getContenu().split(";");
                             joueur.addCagnotteManche(joueur.getBonus(),Integer.parseInt(tab[1]));

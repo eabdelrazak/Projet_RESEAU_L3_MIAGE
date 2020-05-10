@@ -18,8 +18,6 @@ public class ClientHandler implements Runnable {
     final Socket s;
     private Inventaire inventaire;
     private volatile Serveur serveur;
-    private Echange messageReceived;
-    private boolean buzz = false;
 
     public ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos, Serveur serveurP) {
         this.s = s;
@@ -42,12 +40,12 @@ public class ClientHandler implements Runnable {
                 if(s.isClosed()){
                     break;
                 }
-                this.messageReceived = receptionMessage(dis.readUTF());
+                Echange messageReceived = receptionMessage(dis.readUTF());
                 //received = messageReceived.g
 
-                switch (this.messageReceived.getMessage()) {
+                switch (messageReceived.getMessage()) {
                     case Messages.NOM:
-                        this.getInventaire().setNomJoueur(this.messageReceived.getContenu());
+                        this.getInventaire().setNomJoueur(messageReceived.getContenu());
                         dos.writeUTF(creerMessageJsonObject(Messages.NOM,"Identification du joueur : "+ this.getInventaire().getNomJoueur()));
                         dos.writeUTF(creerMessageJsonObject(Messages.BEGIN, "Soyez prêt la partie va commencer"));
                         break;
@@ -57,19 +55,16 @@ public class ClientHandler implements Runnable {
                         //dos.writeUTF(creerMessageJsonObject(Messages.PROPOSER_REPONSE,null));
                         break;
                     case Messages.PROPOSER_REPONSE:
-                        if(this.messageReceived.getContenu().equalsIgnoreCase(this.getInventaire().getMotADeviner())){
-                            System.out.println(this.getInventaire().getNomJoueur()+" a trouvée le mot !!");
-                            dos.writeUTF(creerMessageJsonObject(Messages.MOT_TROUVEE, "Enigme rapide"));
+                        if(messageReceived.getContenu().equalsIgnoreCase(this.getInventaire().getMotADeviner())){
+                            this.serveur.terminerEnigmeRapide(this);
                             this.getInventaire().addCagnoteManche(1,500);
-                            this.serveur.getPartie().getLaManche().setJoueurDebutant(this);
-                            this.serveur.getPartie().getLaManche().commencerManche();
                         }else{
                             this.serveur.getPartie().getLaManche().repriseEnigmeRapide();
                         }
                         break;
                     case Messages.PROPOSER_LETTRE:
-                        if(this.messageReceived.getMessage().length() == 1){
-                            String laLettre = this.messageReceived.getMessage();
+                        if(messageReceived.getMessage().length() == 1){
+                            String laLettre = messageReceived.getMessage();
                             if(!(laLettre.charAt(0) != 'a' && laLettre.charAt(0) != 'i' && laLettre.charAt(0) != 'u' && laLettre.charAt(0) != 'e' && laLettre.charAt(0) != 'o' && laLettre.charAt(0) != 'y')){
                                 if(this.serveur.getPartie().getLaManche().getLeTableau().presenceLettre(laLettre.charAt(0))){
                                     int nombreTrouver = this.serveur.getPartie().getLaManche().getLeTableau().chercherLettre(laLettre.charAt(0));
@@ -163,20 +158,12 @@ public class ClientHandler implements Runnable {
         return s;
     }
 
-    public DataInputStream getDis() {
-        return dis;
-    }
-
     public DataOutputStream getDos() {
         return dos;
     }
 
     public Inventaire getInventaire() {
         return inventaire;
-    }
-
-    public Socket getS() {
-        return s;
     }
 }
 

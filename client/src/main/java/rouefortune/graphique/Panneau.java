@@ -12,6 +12,7 @@ public class Panneau extends JPanel {
 
     public static final int CONNEXION = 0;
     public static final int ENIGME_RAPIDE = 11;
+    public static final int FIN_ENIGME_RAPIDE = 12;
     public static final int ENIGME_NORMALE = 21;
     public static final int FAILURE = -1;
     public static final int CONNECTED = 1;
@@ -44,6 +45,8 @@ public class Panneau extends JPanel {
         g.setFont(pseudoFont);
         g.setColor(Color.BLACK);
         g.drawString("Pseudo: "+this.joueur.getNomJoueur(), 5, 20);
+        g.drawString("Cagnotte Totale: "+this.joueur.getCagnottePartie()+"€", 5, 40);
+        g.drawString("Cagnotte Manche: "+this.joueur.getCagnotteManche()+"€", 5, 60);
         if(state == Panneau.CONNEXION) {
             g.setFont(font);
             g.setColor(Color.BLACK);
@@ -58,9 +61,8 @@ public class Panneau extends JPanel {
             g.setFont(font);
             g.setColor(Color.RED);
             String s = "Connexion echouee";
-
             this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, s);
-        }else if(state == Panneau.ENIGME_RAPIDE || state == Panneau.ENIGME_NORMALE){
+        }else if(state == Panneau.ENIGME_RAPIDE){
             Map<TextAttribute, Object> attributes = new HashMap<>();
             attributes.put(TextAttribute.TRACKING, 0.5);
             Font font2 = font.deriveFont(attributes);
@@ -72,8 +74,11 @@ public class Panneau extends JPanel {
             this.drawMiddle(this.getWidth()/2, 30, g, "Enigme Rapide");
             g.setFont(new Font("Impact", Font.PLAIN, 48));
             this.drawMiddle(this.getWidth()/2, 90, g, "Theme: "+this.theme);
-
-
+        }else if(state == Panneau.FIN_ENIGME_RAPIDE){
+            g.setFont(font);
+            g.setColor(Color.BLACK);
+            this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, "Fin de l'enigme rapide !");
+        }else if(state == Panneau.ENIGME_NORMALE){
 
         }
     }

@@ -1,8 +1,5 @@
 package rouefortune.joueur;
 
-import java.io.*;
-import java.util.Scanner;
-
 
 public class Joueur {
 
@@ -10,7 +7,6 @@ public class Joueur {
     private String nomJoueur;
     private int cagnottePartie;
     private int cagnotteManche;
-    private String proposition;
     private int bonus;
 
 
@@ -19,36 +15,7 @@ public class Joueur {
         this.client = client;
         this.cagnottePartie = 0;
         this.cagnotteManche = 0;
-        this.proposition = " ";
         this.bonus = 0;
-    }
-
-    /**
-     * Fonction permettant au joueur de jouer son tour.
-     */
-    public void jouer() {
-
-    }
-
-    public String getProposition() {
-        return proposition;
-    }
-
-    public void proposer() {
-        DataOutputStream dos = null;
-        try {
-            dos = new DataOutputStream(this.client.getSocket().getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Scanner scn = new Scanner(System.in);
-        String proposition = scn.nextLine();
-        try {
-            assert dos != null;
-            dos.writeUTF(proposition);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public String getNomJoueur() {
@@ -60,7 +27,7 @@ public class Joueur {
     }
 
     public void addCagnotteManche(int bonus, int somme){
-        this.cagnotteManche += (somme*this.bonus);
+        this.cagnotteManche += (somme*bonus);
     }
 
     public void setCagnotteManche(int cagnotteManche) {
@@ -81,5 +48,17 @@ public class Joueur {
 
     public Client getClient() {
         return client;
+    }
+
+    public int getCagnottePartie() {
+        return cagnottePartie;
+    }
+
+    public void setCagnottePartie(int cagnottePartie) {
+        this.cagnottePartie = cagnottePartie;
+    }
+
+    public int getCagnotteManche() {
+        return cagnotteManche;
     }
 }

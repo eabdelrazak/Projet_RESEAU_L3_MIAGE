@@ -1,26 +1,24 @@
 package rouefortune.serveur;
 
 import rouefortune.Messages;
+import rouefortune.moteur.EnigmeNormale;
 import rouefortune.moteur.EnigmeRapide;
 import rouefortune.moteur.Roue;
 import rouefortune.moteur.TableauAffichage;
 
 import java.io.IOException;
-import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Manche {
 
     private int numeroManche;
-    /*private Inventaire[] lesJoueurs;*/
-    private ArrayList<ClientHandler> clientHandlers;
-    public ClientHandler joueurDebutant;
+    public ClientHandler joueurActuel;
     private Serveur serveur;
     private TableauAffichage leTableau;
     private Roue laRoue;
     private EnigmeRapide enigmeRapide;
     private Random rand;
+    private EnigmeNormale enigmeNormale;
 
 
     public Manche(int i, Serveur serveur, TableauAffichage tableau, Roue roue) {
@@ -28,12 +26,12 @@ public class Manche {
         this.serveur = serveur;
         this.leTableau = tableau;
         this.laRoue = roue;
-        this.joueurDebutant = null;
+        this.joueurActuel = null;
         this.rand = new Random();
     }
 
     public void commencerManche(){
-        if(this.joueurDebutant == null){
+        if(this.joueurActuel == null){
             jouerEnigmeRapide();
         }else{
             jouerEnigmeLongue();
@@ -44,8 +42,7 @@ public class Manche {
      * Commence l'enigme rapide et la révélation des lettres
      */
     private void jouerEnigmeRapide() {
-        int random_un = rand.nextInt(this.serveur.tabEnigmes.length);
-        this.leTableau.setEnigmeADeviner(this.serveur.tabEnigmes[random_un][0], this.serveur.tabEnigmes[random_un][1]);
+        this.setRandomEnigme();
         this.enigmeRapide = new EnigmeRapide(this.leTableau, this.serveur);
         this.enigmeRapide.resume();
     }
@@ -78,28 +75,30 @@ public class Manche {
         this.enigmeRapide.stop();
     }
 
-    /**
-     * Permet a un joueur de faire une proposition a l'enigme rapide
-     */
-    public boolean faireUnePropositionEnigmeRapide(String proposition){
-        this.pauseEnigmeRapide();
-        boolean resultatProposition = this.enigmeRapide.faireProposition(proposition);
-        if(!resultatProposition){
-            repriseEnigmeRapide();
-            return false;
-        }else{
-            terminerEnigmeRapide();
-            return true;
-        }
+    public void jouerEnigmeLongue() {
+        this.setRandomEnigme();
+        this.enigmeNormale = new EnigmeNormale(this.leTableau, this.serveur);
     }
 
-    public void jouerEnigmeLongue() {
-        /*for(int i = this.joueurDebutant; i < this.lesJoueurs.length; i++){
-            tournerRoue(i);
+    private void setRandomEnigme() {
+        int random_un;
+        do {
+            random_un = rand.nextInt(this.serveur.tabEnigmes.length);
+        }while(this.serveur.tabEnigmes[random_un] == null);
+        this.leTableau.setEnigmeADeviner(this.serveur.tabEnigmes[random_un][0], this.serveur.tabEnigmes[random_un][1]);
+        this.serveur.enleverEnigme(random_un);
+    }
+
+    public void passerLaMain(){
+        for(int i=0; i<this.serveur.getClientHandlers().size(); i++){
+            if(this.serveur.getClientHandlers().get(i) == joueurActuel){
+                if(i < this.serveur.getClientHandlers().size()-1) {
+                    joueurActuel = this.serveur.getClientHandlers().get(i + 1);
+                }else{
+                    joueurActuel = this.serveur.getClientHandlers().get(0);
+                }
+            }
         }
-        for (int i = 0; i < this.joueurDebutant; i++){
-            tournerRoue(i);
-        }*/
     }
 
     public void passe(){
@@ -110,12 +109,8 @@ public class Manche {
         return this.laRoue.tourner();
     }
 
-    public EnigmeRapide getEnigmeRapide() {
-        return enigmeRapide;
-    }
-
-    public void setJoueurDebutant(ClientHandler joueurDebutant) {
-        this.joueurDebutant = joueurDebutant;
+    public void setJoueurActuel(ClientHandler joueurActuel) {
+        this.joueurActuel = joueurActuel;
     }
 
     public TableauAffichage getLeTableau() {

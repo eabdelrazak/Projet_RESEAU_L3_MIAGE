@@ -88,14 +88,6 @@ public class TableauAffichage {
         return fini;
     }
 
-    public boolean comparerProposition(String propositionP){
-        return this.propositionATrouver.equals(propositionP);
-    }
-
-    public char[] getEnigmeDeviner() {
-        return enigmeDeviner;
-    }
-
     public String AfficherEnigmeDeviner(){
         StringBuilder s = new StringBuilder();
         for (char c : enigmeDeviner) {

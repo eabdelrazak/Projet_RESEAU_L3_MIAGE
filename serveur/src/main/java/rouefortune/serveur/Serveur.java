@@ -22,8 +22,6 @@ public class Serveur {
     Thread [] clientThreads;
     private int nombreDeJoueur = 0;
     private Partie partie = null;
-    private boolean setpartie = false;
-    private int nbReady = 0;
 
     public Serveur(int nombreDeJoueur) throws IOException {
 
@@ -120,10 +118,6 @@ public class Serveur {
         return clientHandlers;
     }
 
-    public void setClientHandlers(ArrayList<ClientHandler> clientHandlers) {
-        this.clientHandlers = clientHandlers;
-    }
-
     public int getNombreDeJoueur() {
         return nombreDeJoueur;
     }
@@ -136,16 +130,39 @@ public class Serveur {
         this.nombreDeJoueur = nombreDeJoueur;
     }
 
-    public void commencerEnigme(TableauAffichage tableau) {
+    public void commencerEnigme(TableauAffichage tableau, String typeEnigme) {
         for (ClientHandler client : clientHandlers) {
             try {
                 client.getInventaire().setMotADeviner(tableau.getPropositionATrouver());
-                String message = creerMessageJsonObject(Messages.DEBUT_ENIGME_RAPIDE, tableau.getTheme());
+                String message = creerMessageJsonObject(typeEnigme, tableau.getTheme());
                 client.getDos().writeUTF(message);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void terminerEnigmeRapide(ClientHandler gagnant){
+        System.out.println(gagnant.getInventaire().getNomJoueur()+" a trouvée le mot !!");
+        for(ClientHandler client : clientHandlers){
+            if(client.equals(gagnant)){
+                try {
+                    client.getDos().writeUTF(creerMessageJsonObject(Messages.MOT_TROUVEE, "Enigme rapide"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                try {
+                    client.getDos().writeUTF(creerMessageJsonObject(Messages.MOT_TROUVEE_AUTRE, "Enigme rapide"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        this.partie.getLaManche().setJoueurActuel(gagnant);
+        this.partie.getLaManche().commencerManche();
+        this.partie.getLaManche().terminerEnigmeRapide();
     }
 
     public void envoyerEnigme(TableauAffichage tableau) {
@@ -194,5 +211,17 @@ public class Serveur {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void enleverEnigme(int random_un) {
+        String[][] newtab = new String[this.tabEnigmes.length-1][2];
+        int j=0;
+        for(int i=0; i<this.tabEnigmes.length; i++){
+            if(i != random_un) {
+                newtab[j] = this.tabEnigmes[i];
+                j++;
+            }
+        }
+        this.tabEnigmes = newtab;
     }
 }

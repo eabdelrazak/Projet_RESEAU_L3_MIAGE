@@ -1,16 +1,14 @@
 package rouefortune.moteur;
 
+
 import rouefortune.Messages;
-import rouefortune.serveur.ClientHandler;
 import rouefortune.serveur.Serveur;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class EnigmeRapide extends Enigme implements Runnable {
     private volatile boolean running = true;
     private volatile boolean paused = true;
-    private Serveur serveur;
     private final Object pauseLock = new Object();
 
     public Thread threadLettre;
@@ -20,7 +18,7 @@ public class EnigmeRapide extends Enigme implements Runnable {
         this.serveur = serveur;
         this.threadLettre = new Thread(this);
         this.start();
-        this.serveur.commencerEnigme(this.leTableau);
+        this.serveur.commencerEnigme(this.leTableau, Messages.DEBUT_ENIGME_RAPIDE);
     }
 
     /**
@@ -95,9 +93,5 @@ public class EnigmeRapide extends Enigme implements Runnable {
      */
     public void start() {
         this.threadLettre.start();
-    }
-
-    public boolean faireProposition(String proposition) {
-        return this.leTableau.comparerProposition(proposition);
     }
 }
