@@ -11,9 +11,10 @@ import java.util.Map;
 public class Panneau extends JPanel {
 
     public static final int CONNEXION = 0;
-    public static final int ENIGME_RAPIDE = 1;
-    public static final int ENIGME_NORMALE = 2;
+    public static final int ENIGME_RAPIDE = 11;
+    public static final int ENIGME_NORMALE = 21;
     public static final int FAILURE = -1;
+    public static final int CONNECTED = 1;
 
     public String enigme = "";
     public Joueur joueur;
@@ -47,6 +48,16 @@ public class Panneau extends JPanel {
             g.setFont(font);
             g.setColor(Color.BLACK);
             String s = "Connexion en cours";
+            this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, s);
+        }else if(state == Panneau.CONNECTED){
+            g.setFont(font);
+            g.setColor(Color.BLACK);
+            String s = "En attente de joueurs";
+            this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, s);
+        }else if(state == Panneau.FAILURE) {
+            g.setFont(font);
+            g.setColor(Color.RED);
+            String s = "Connexion echouee";
 
             this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, s);
         }else if(state == Panneau.ENIGME_RAPIDE || state == Panneau.ENIGME_NORMALE){
@@ -58,16 +69,12 @@ public class Panneau extends JPanel {
             this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, this.enigme);
 
             g.setFont(font);
-            this.drawMiddle(this.getWidth()/2, 50, g, this.theme);
+            this.drawMiddle(this.getWidth()/2, 30, g, "Enigme Rapide");
+            g.setFont(new Font("Impact", Font.PLAIN, 48));
+            this.drawMiddle(this.getWidth()/2, 90, g, "Theme: "+this.theme);
 
 
 
-        }else if(state == Panneau.FAILURE) {
-            g.setFont(font);
-            g.setColor(Color.RED);
-            String s = "Connexion echouee";
-
-            this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, s);
         }
     }
 

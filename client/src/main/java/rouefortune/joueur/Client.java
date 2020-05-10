@@ -58,18 +58,16 @@ public class Client {
                 switch (this.message.getMessage()) {
                     case Messages.CONNEXION_REUSSI:
                         System.out.println("Connected");
-                        this.fenetrePrincipal.setPanState(Panneau.ENIGME_RAPIDE);
+                        this.fenetrePrincipal.setPanState(Panneau.CONNECTED);
                         this.fenetrePrincipal.repaint();
                         dos.writeUTF(creerMessageJsonObject(Messages.NOM, joueur.getNomJoueur()));
                         break;
                     case Messages.BEGIN:
                         System.out.println(this.message.getContenu());
                         break;
-                    case Messages.NOM:
-                        System.out.println(this.message.getContenu());
-                        break;
                     case Messages.DEBUT_ENIGME_RAPIDE:
                         System.out.println(this.message.getContenu());
+                        this.fenetrePrincipal.setPanState(Panneau.ENIGME_RAPIDE);
                         this.fenetrePrincipal.pan.buzzer.setVisible(true);
                         this.fenetrePrincipal.pan.theme = this.message.getContenu();
                         this.fenetrePrincipal.repaint();
