@@ -33,12 +33,11 @@ public class Manche {
     }
 
     public void commencerManche(){
-        /*if(this.joueurDebutant == -1){
+        if(this.joueurDebutant == null){
             jouerEnigmeRapide();
         }else{
             jouerEnigmeLongue();
-        }*/
-        jouerEnigmeRapide();
+        }
     }
 
     /**

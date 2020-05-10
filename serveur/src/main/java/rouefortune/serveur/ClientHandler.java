@@ -35,13 +35,8 @@ public class ClientHandler implements Runnable {
     }
 
     @Override
-    public void run()
-    {
-        String received;
-        String toReturn;
-
-        while (true)
-        {
+    public void run() {
+        while (true) {
             try {
                 // receive the answer from client
                 if(s.isClosed()){
@@ -57,7 +52,7 @@ public class ClientHandler implements Runnable {
                         dos.writeUTF(creerMessageJsonObject(Messages.BEGIN, "Soyez prêt la partie va commencer"));
                         break;
                     case Messages.BUZZ:
-                        System.out.println("MOT A DEVINER →"+this.getInventaire().getMotADeviner());
+                        //System.out.println("MOT A DEVINER →"+this.getInventaire().getMotADeviner());
                         this.serveur.mettreEnPause(this);
                         //dos.writeUTF(creerMessageJsonObject(Messages.PROPOSER_REPONSE,null));
                         break;
@@ -67,6 +62,7 @@ public class ClientHandler implements Runnable {
                             dos.writeUTF(creerMessageJsonObject(Messages.MOT_TROUVEE, "Enigme rapide"));
                             this.getInventaire().addCagnoteManche(1,500);
                             this.serveur.getPartie().getLaManche().setJoueurDebutant(this);
+                            this.serveur.getPartie().getLaManche().commencerManche();
                         }else{
                             this.serveur.getPartie().getLaManche().repriseEnigmeRapide();
                         }
