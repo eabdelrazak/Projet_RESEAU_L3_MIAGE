@@ -19,17 +19,22 @@ public class Panneau extends JPanel {
 
     public String enigme = "";
     public Joueur joueur;
-    public Buzzer buzzer;
+    public Buzzer buzzer, tournerroue;
     public int state = Panneau.CONNEXION;
     public String theme = "";
     public PropositionTexte textfield;
-    public String gagnant;
+    public String gagnant = "";
+    public String joueurActuel = "";
 
     public void init(Joueur joueur)  {
         this.joueur = joueur;
-        this.buzzer = new Buzzer("Buzz", joueur);
+        this.buzzer = new Buzzer("Buzz", joueur, Buzzer.ENIGME_RAPIDE);
         this.buzzer.setVisible(false);
         this.add(buzzer);
+
+        this.tournerroue = new Buzzer("Roue", joueur, Buzzer.ENIGME_NORMALE);
+        this.tournerroue.setVisible(false);
+        this.add(tournerroue);
 
         this.textfield = new PropositionTexte(joueur);
         this.textfield.setVisible(false);
@@ -81,7 +86,18 @@ public class Panneau extends JPanel {
             this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, "Fin de l'enigme rapide !");
             this.drawMiddle(this.getWidth()/2, this.getHeight()/2+50, g, this.gagnant+" gagne l'enigme rapide !");
         }else if(state == Panneau.ENIGME_NORMALE){
-
+            g.setFont(pseudoFont);
+            g.setColor(Color.BLACK);
+            this.drawMiddle(this.getWidth()/2, 200, g, "Joueur actuel: "+this.joueurActuel);
+            Map<TextAttribute, Object> attributes = new HashMap<>();
+            attributes.put(TextAttribute.TRACKING, 0.5);
+            Font font2 = font.deriveFont(attributes);
+            g.setFont(font2);
+            this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, this.enigme);
+            g.setFont(font);
+            this.drawMiddle(this.getWidth()/2, 30, g, "Enigme Normale");
+            g.setFont(new Font("Impact", Font.PLAIN, 48));
+            this.drawMiddle(this.getWidth()/2, 90, g, "Theme: "+this.theme);
         }
     }
 

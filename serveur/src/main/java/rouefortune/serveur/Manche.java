@@ -89,7 +89,7 @@ public class Manche {
         this.serveur.enleverEnigme(random_un);
     }
 
-    public void passerLaMain(){
+    public void passerLaMain() {
         for(int i=0; i<this.serveur.getClientHandlers().size(); i++){
             if(this.serveur.getClientHandlers().get(i) == joueurActuel){
                 if(i < this.serveur.getClientHandlers().size()-1) {
@@ -101,16 +101,13 @@ public class Manche {
         }
     }
 
-    public void passe(){
-
-    }
-
     public String tournerRoue(){
         return this.laRoue.tourner();
     }
 
     public void setJoueurActuel(ClientHandler joueurActuel) {
         this.joueurActuel = joueurActuel;
+        this.serveur.envoyerJoueurActuel();
     }
 
     public TableauAffichage getLeTableau() {

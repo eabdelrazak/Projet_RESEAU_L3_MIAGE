@@ -15,10 +15,17 @@ public class Buzzer extends JButton implements MouseListener {
     private Joueur joueur;
     private String name;
     private Image currImg, img, imgEntered, imgPressed;
-    public Buzzer(String str, Joueur joueur){
+
+    public static final int ENIGME_RAPIDE = 0;
+    public static final int ENIGME_NORMALE = 1;
+
+    public int state;
+
+    public Buzzer(String str, Joueur joueur, int state){
         super(str);
         this.joueur = joueur;
         this.name = str;
+        this.state = state;
         this.setBounds(350, 400, 100, 100);
         try {
             img = ImageIO.read(Objects.requireNonNull(Buzzer.class.getClassLoader().getResourceAsStream("buzzerSelected.png")));
@@ -46,7 +53,11 @@ public class Buzzer extends JButton implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        this.joueur.getClient().sendBuzz();
+        if(state == Buzzer.ENIGME_RAPIDE) {
+            this.joueur.getClient().sendBuzz();
+        }else if(state == Buzzer.ENIGME_NORMALE){
+
+        }
         //System.out.println("BUZZ");
         //this.joueur.proposer();
     }

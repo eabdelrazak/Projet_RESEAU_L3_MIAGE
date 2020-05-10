@@ -60,6 +60,25 @@ public class TableauAffichage {
         return false;
     }
 
+    /**
+     * Méthode pour avoir le nombre de consonnes restante dans l'enigme
+     * @return Nombre de consonnes restantes
+     */
+    public int getNombreConsonneRestante() {
+        int nbConsonne=0;
+        char[] consonnes = {'B','C','D','F','G','H','J','K','L','M','N','P','Q','R','S','T','V','W','X','Z'};
+        for(int i=0; i < consonnes.length; i++) {
+            for(int j=0; j < this.enigmeADeviner.length; j++){
+                if (consonnes[i] == this.enigmeADeviner[j]) {
+                    nbConsonne++;
+                    break;
+                }
+            }
+        }
+        System.out.println("Il reste "+nbConsonne+" consonnes dans le mot");
+        return nbConsonne;
+    }
+
     //Methode pour révéler une lettre aux hasard (a appeler toute les X secondes)
     public void revelerLettre(){
         boolean lettreReveler = false;

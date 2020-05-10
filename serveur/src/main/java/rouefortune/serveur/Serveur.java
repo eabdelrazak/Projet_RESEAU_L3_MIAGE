@@ -13,6 +13,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.net.*;
+import java.util.concurrent.TimeUnit;
 
 public class Serveur {
 
@@ -152,19 +153,24 @@ public class Serveur {
                 e.printStackTrace();
             }
         }
-
+        this.partie.getLaManche().terminerEnigmeRapide();
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         this.partie.getLaManche().setJoueurActuel(gagnant);
         this.partie.getLaManche().commencerManche();
-        this.partie.getLaManche().terminerEnigmeRapide();
+
     }
 
-    public void envoyerEnigme(TableauAffichage tableau) {
+    public void envoyerEnigme(TableauAffichage tableau, String typeEnigme) {
 
         for (ClientHandler client : clientHandlers) {
             try {
                 System.out.println(client.getInventaire().getNomJoueur());
                 System.out.println(tableau.AfficherEnigmeDeviner());
-                String message = creerMessageJsonObject(Messages.ENIGME_RAPIDE, tableau.AfficherEnigmeDeviner());
+                String message = creerMessageJsonObject(typeEnigme, tableau.AfficherEnigmeDeviner());
                 client.getDos().writeUTF(message);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -221,6 +227,17 @@ public class Serveur {
             }
         }
         this.tabEnigmes = newtab;
+    }
+
+    public void envoyerJoueurActuel() {
+        for (ClientHandler client : clientHandlers) {
+            try {
+                String message = creerMessageJsonObject(Messages.JOUEUR_ACTUEL, this.getPartie().getLaManche().joueurActuel.getInventaire().getNomJoueur());
+                client.getDos().writeUTF(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void deconnecterAll(){

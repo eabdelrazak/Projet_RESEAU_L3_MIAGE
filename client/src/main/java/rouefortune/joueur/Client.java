@@ -80,14 +80,14 @@ public class Client {
                         this.fenetrePrincipal.pan.theme = this.message.getContenu();
                         this.fenetrePrincipal.repaint();
                         break;
-                    case Messages.ENIGME_RAPIDE:
-                        this.fenetrePrincipal.pan.enigme = this.message.getContenu();
+                    case Messages.DEBUT_ENIGME_NORMALE:
+                        this.fenetrePrincipal.setPanState(Panneau.ENIGME_NORMALE);
+                        this.fenetrePrincipal.pan.theme = this.message.getContenu();
                         this.fenetrePrincipal.repaint();
                         break;
-                    case Messages.DEBUT_ENIGME_NORMALE:
-
-                        break;
-                    case Messages.ENIGME_NORMALE:
+                    case Messages.ENIGME_RAPIDE: case Messages.ENIGME_NORMALE:
+                        this.fenetrePrincipal.pan.enigme = this.message.getContenu();
+                        this.fenetrePrincipal.repaint();
                         break;
                     case Messages.FAIRE_PROPOSITION:
                         this.fenetrePrincipal.pan.buzzer.setVisible(false);
@@ -101,13 +101,16 @@ public class Client {
                             this.fenetrePrincipal.pan.textfield.setVisible(false);
                             this.fenetrePrincipal.pan.gagnant = this.message.getContenu().split(";")[1];
                             this.fenetrePrincipal.setPanState(Panneau.FIN_ENIGME_RAPIDE);
+                            this.fenetrePrincipal.pan.theme = "";
+                            this.fenetrePrincipal.pan.enigme = "";
                             this.fenetrePrincipal.repaint();
-                        } else {
-                            String[] tab = this.message.getContenu().split(";");
-                            joueur.addCagnotteManche(joueur.getBonus(), Integer.parseInt(tab[1]));
+                        }else if(this.message.getContenu().split(";")[0].equals("normale")){
+
                         }
                         break;
-                    case Messages.MOT_TROUVEE_AUTRE:
+                    case Messages.CORRECT_LETTRE:
+                        joueur.addCagnotteManche(joueur.getBonus(),Integer.parseInt(this.message.getContenu().split(";")[1]));
+                        break;
                     case Messages.RESULTAT_ROUE:
                         System.out.println("En tournant la roue, vous avez eu : " + this.message.getContenu());
                         if (this.message.getContenu().equals("Banqueroute")) {
@@ -133,6 +136,14 @@ public class Client {
                         System.exit(0);
                         //Runtime.getRuntime().exit(0);
                         disconnect = true;
+                        break;
+                    case Messages.JOUEUR_ACTUEL:
+                        this.fenetrePrincipal.pan.joueurActuel = this.message.getContenu();
+                        if(this.message.getContenu().equals(this.joueur.getNomJoueur())){
+                            this.fenetrePrincipal.pan.tournerroue.setVisible(true);
+                        }else{
+                            this.fenetrePrincipal.pan.tournerroue.setVisible(false);
+                        }
                         break;
                     default:
                 }

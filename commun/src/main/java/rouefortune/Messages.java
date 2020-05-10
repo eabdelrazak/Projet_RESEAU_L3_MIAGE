@@ -22,10 +22,8 @@ public class Messages {
     public static final String PROPOSER_REPONSE="serveurproposerreponse";
     // Le serveur demande une proposition
     public static final String BEGIN = "serveurdebut";
-    // Le serveur notifie le gagnant
+    // Le serveur notifie les joueurs que le mot à été trouvé et donne le gagnant
     public static final String MOT_TROUVEE = "serveurvainqueur";
-    // Le serveur notifie les perdants que quelqu'un à gagné
-    public static final String MOT_TROUVEE_AUTRE = "serveurvainqueurautre";
     // Le serveur reprend l'enigme
     public static final String REPRENDRE = "serveurreprendre";
     //Le serveur accepte la lettre proposer
@@ -36,6 +34,8 @@ public class Messages {
     public static final String INCORECT_LETTRE="serveurincorectlettre";
     //Le serveur renvoie le resulat de la roue
     public static final String RESULTAT_ROUE="serveurresultatroue";
+    //Le serveur indique quel joueur joue
+    public static final String JOUEUR_ACTUEL="serveurjoueuractuel";
 
     /* MESSAGE CLIENT → SERVEUR */
     // Le client buzz

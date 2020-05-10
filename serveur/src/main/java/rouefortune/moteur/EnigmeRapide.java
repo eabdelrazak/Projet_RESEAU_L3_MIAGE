@@ -27,7 +27,7 @@ public class EnigmeRapide extends Enigme implements Runnable {
     public void revelerLettre() {
         if(this.leTableau.getNombreCharacterRestant() > 1 && !paused){
             this.leTableau.revelerLettre();
-            this.serveur.envoyerEnigme(this.leTableau);
+            this.serveur.envoyerEnigme(this.leTableau, Messages.ENIGME_RAPIDE);
         }
     }
 
