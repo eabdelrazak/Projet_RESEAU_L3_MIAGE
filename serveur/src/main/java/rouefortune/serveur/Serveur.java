@@ -147,9 +147,9 @@ public class Serveur {
     }
 
     public void envoyerEnigme(TableauAffichage tableau) {
+        System.out.println(tableau.AfficherEnigmeDeviner());
         for (ClientHandler client : clientHandlers) {
             try {
-                System.out.println(tableau.AfficherEnigmeDeviner());
                 client.getInventaire().setMotADeviner(tableau.getPropositionATrouver());
                 String message = creerMessageJsonObject(Messages.ENIGME_RAPIDE, tableau.AfficherEnigmeDeviner());
                 client.getDos().writeUTF(message);

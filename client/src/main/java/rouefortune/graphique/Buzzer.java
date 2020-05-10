@@ -32,10 +32,13 @@ public class Buzzer extends JButton implements MouseListener {
 
     @Override
     public void paintComponent(Graphics g){
-        Graphics2D g2d = (Graphics2D)g;
+        super.paintComponent(g);
+        /*Graphics2D g2d = (Graphics2D)g;
+        g2d.setColor(Color.WHITE);
+        g2d.drawRect(0,0, this.getWidth(), this.getHeight());
         g2d.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
         g2d.setColor(Color.BLACK);
-        g2d.drawString(this.name, this.getWidth() / 2 - (this.getWidth() / 2 / 4), (this.getHeight() /2) +5);
+        g2d.drawString(this.name, this.getWidth() / 2 - (this.getWidth() / 2 / 4), (this.getHeight() /2) +5);*/
     }
 
     @Override

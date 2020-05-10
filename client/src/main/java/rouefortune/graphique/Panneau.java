@@ -15,18 +15,25 @@ public class Panneau extends JPanel {
     public static final int FAILURE = -1;
 
     public String enigme = "";
+    public Joueur joueur;
     public int state = Panneau.CONNEXION;
+    private Buzzer buzzer;
 
     public void init(Joueur joueur)  {
-        Buzzer buzzer = new Buzzer("Buzz", joueur);
+        this.joueur = joueur;
+        this.buzzer = new Buzzer("Buzz", joueur);
         this.add(buzzer);
     }
     @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         g.setColor(Color.WHITE);
-        g.drawRect(0, 0, this.getWidth(), this.getHeight());
+        g.fillRect(0, 0, this.getWidth(), this.getHeight());
         Font font = new Font("Impact", Font.PLAIN, 64);
-
+        Font pseudoFont = new Font("Impact", Font.PLAIN, 32);
+        g.setFont(pseudoFont);
+        g.setColor(Color.BLACK);
+        g.drawString(this.joueur.getNomJoueur(), 10, 40);
         if(state == Panneau.CONNEXION) {
             g.setFont(font);
             g.setColor(Color.BLACK);
