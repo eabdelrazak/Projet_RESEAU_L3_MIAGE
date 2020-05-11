@@ -18,12 +18,13 @@ public class Panneau extends JPanel {
     public static final int ENIGME_NORMALE = 21;
     public static final int FIN_ENIGME_NORMALE = 22;
     public static final int END = -2;
+    public static final int INFORMATION = 621;
 
 
     public String enigme = "";
     public Joueur joueur;
     public Buzzer buzzer, tournerroue;
-    public int state = Panneau.CONNEXION;
+    public int state = Panneau.INFORMATION;
     public String theme = "";
     public PropositionTexte textfield, lettrefield;
     public String gagnant = "";
@@ -31,6 +32,8 @@ public class Panneau extends JPanel {
     public String resultatRoue = "";
     public Guesser guesser;
     public Buyer buyer;
+    private InformationTexte pseudofield, ipfield, portfield;
+    private JButton sendInformation;
 
     public void init(Joueur joueur)  {
         this.joueur = joueur;
@@ -57,6 +60,23 @@ public class Panneau extends JPanel {
         this.lettrefield = new PropositionTexte(joueur, PropositionTexte.ENIGME_NORMALE, this);
         this.lettrefield.setVisible(false);
         this.add(lettrefield);
+
+        this.pseudofield = new InformationTexte(200, 100, InformationTexte.PSEUDO, this);
+        this.pseudofield.setVisible(true);
+        this.add(pseudofield);
+
+        this.ipfield = new InformationTexte(200, 200, InformationTexte.IP,this);
+        this.ipfield.setVisible(true);
+        this.add(ipfield);
+
+        this.portfield = new InformationTexte(200, 300, InformationTexte.PORT,this);
+        this.portfield.setVisible(true);
+        this.add(portfield);
+
+        this.sendInformation = new InformationSend("Send", this.joueur, this, pseudofield, ipfield, portfield);
+        this.sendInformation.setVisible(true);
+        this.add(sendInformation);
+        this.repaint();
     }
 
     @Override
@@ -64,71 +84,79 @@ public class Panneau extends JPanel {
         super.paintComponent(g);
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
-        Font font = new Font("Impact", Font.PLAIN, 64);
-        Font pseudoFont = new Font("Impact", Font.PLAIN, 20);
-        g.setFont(pseudoFont);
-        g.setColor(Color.BLACK);
-        g.drawString("Pseudo: "+this.joueur.getNomJoueur(), 5, 20);
-        g.drawString("Cagnotte Totale: "+this.joueur.getCagnottePartie()+"€", 5, 40);
-        g.drawString("Cagnotte Manche: "+this.joueur.getCagnotteManche()+"€", 5, 60);
-        if(state == Panneau.CONNEXION) {
-            g.setFont(font);
+        if(state == Panneau.INFORMATION) {
             g.setColor(Color.BLACK);
-            String s = "Connexion en cours";
-            this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, s);
-        }else if(state == Panneau.CONNECTED){
-            g.setFont(font);
-            g.setColor(Color.BLACK);
-            String s = "En attente de joueurs";
-            this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, s);
-        }else if(state == Panneau.FAILURE) {
-            g.setFont(font);
-            g.setColor(Color.RED);
-            String s = "Connexion echouee";
-            this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, s);
-        }else if(state == Panneau.ENIGME_RAPIDE){
-            Map<TextAttribute, Object> attributes = new HashMap<>();
-            attributes.put(TextAttribute.TRACKING, 0.5);
-            Font font2 = font.deriveFont(attributes);
-            g.setFont(font2);
-            g.setColor(Color.BLACK);
-            this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, this.enigme);
-            g.setFont(font);
-            this.drawMiddle(this.getWidth()/2, 30, g, "Enigme Rapide");
-            g.setFont(new Font("Impact", Font.PLAIN, 48));
-            this.drawMiddle(this.getWidth()/2, 90, g, "Theme: "+this.theme);
-        }else if(state == Panneau.FIN_ENIGME_RAPIDE){
-            font = new Font("Impact", Font.PLAIN, 48);
-            g.setFont(font);
-            g.setColor(Color.BLACK);
-            this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, "Fin de l'enigme rapide !");
-            this.drawMiddle(this.getWidth()/2, this.getHeight()/2+50, g, this.gagnant+" gagne l'enigme rapide !");
-        }else if(state == Panneau.ENIGME_NORMALE){
+            g.setFont(new Font("Impact", Font.PLAIN, 20));
+            this.drawMiddle(this.getWidth()/2, 85,g, "Pseudo:");
+            this.drawMiddle(this.getWidth()/2, 185,g, "IP:");
+            this.drawMiddle(this.getWidth()/2, 285,g, "Port:");
+        }else {
+            Font font = new Font("Impact", Font.PLAIN, 64);
+            Font pseudoFont = new Font("Impact", Font.PLAIN, 20);
             g.setFont(pseudoFont);
             g.setColor(Color.BLACK);
-            this.drawMiddle(this.getWidth()/2, 200, g, "Joueur actuel: "+this.joueurActuel);
-            this.drawMiddle(this.getWidth()/2, 375, g, this.resultatRoue);
-            Map<TextAttribute, Object> attributes = new HashMap<>();
-            attributes.put(TextAttribute.TRACKING, 0.5);
-            Font font2 = font.deriveFont(attributes);
-            g.setFont(font2);
-            this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, this.enigme);
-            g.setFont(font);
-            this.drawMiddle(this.getWidth()/2, 30, g, "Enigme Normale");
-            g.setFont(new Font("Impact", Font.PLAIN, 48));
-            this.drawMiddle(this.getWidth()/2, 90, g, "Theme: "+this.theme);
-        }else if(state == Panneau.FIN_ENIGME_NORMALE){
-            font = new Font("Impact", Font.PLAIN, 48);
-            g.setFont(font);
-            g.setColor(Color.BLACK);
-            this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, "Fin de l'enigme normale !");
-            this.drawMiddle(this.getWidth()/2, this.getHeight()/2+50, g, this.gagnant+" gagne l'enigme normale !");
-        }else if(state == Panneau.END){
-            g.setFont(font);
-            g.setColor(Color.BLACK);
-            String s = "Partie terminee";
-            this.drawMiddle(this.getWidth()/2, this.getHeight()/2-32, g, s);
-            this.drawMiddle(this.getWidth()/2, this.getHeight()/2+32, g, "Vainqueur: "+this.gagnant);
+            g.drawString("Pseudo: " + this.joueur.getNomJoueur(), 5, 20);
+            g.drawString("Cagnotte Totale: " + this.joueur.getCagnottePartie() + "€", 5, 40);
+            g.drawString("Cagnotte Manche: " + this.joueur.getCagnotteManche() + "€", 5, 60);
+            if (state == Panneau.CONNEXION) {
+                g.setFont(font);
+                g.setColor(Color.BLACK);
+                String s = "Connexion en cours";
+                this.drawMiddle(this.getWidth() / 2, this.getHeight() / 2, g, s);
+            } else if (state == Panneau.CONNECTED) {
+                g.setFont(font);
+                g.setColor(Color.BLACK);
+                String s = "En attente de joueurs";
+                this.drawMiddle(this.getWidth() / 2, this.getHeight() / 2, g, s);
+            } else if (state == Panneau.FAILURE) {
+                g.setFont(font);
+                g.setColor(Color.RED);
+                String s = "Connexion echouee";
+                this.drawMiddle(this.getWidth() / 2, this.getHeight() / 2, g, s);
+            } else if (state == Panneau.ENIGME_RAPIDE) {
+                Map<TextAttribute, Object> attributes = new HashMap<>();
+                attributes.put(TextAttribute.TRACKING, 0.5);
+                Font font2 = font.deriveFont(attributes);
+                g.setFont(font2);
+                g.setColor(Color.BLACK);
+                this.drawMiddle(this.getWidth() / 2, this.getHeight() / 2, g, this.enigme);
+                g.setFont(font);
+                this.drawMiddle(this.getWidth() / 2, 30, g, "Enigme Rapide");
+                g.setFont(new Font("Impact", Font.PLAIN, 48));
+                this.drawMiddle(this.getWidth() / 2, 90, g, "Theme: " + this.theme);
+            } else if (state == Panneau.FIN_ENIGME_RAPIDE) {
+                font = new Font("Impact", Font.PLAIN, 48);
+                g.setFont(font);
+                g.setColor(Color.BLACK);
+                this.drawMiddle(this.getWidth() / 2, this.getHeight() / 2, g, "Fin de l'enigme rapide !");
+                this.drawMiddle(this.getWidth() / 2, this.getHeight() / 2 + 50, g, this.gagnant + " gagne l'enigme rapide !");
+            } else if (state == Panneau.ENIGME_NORMALE) {
+                g.setFont(pseudoFont);
+                g.setColor(Color.BLACK);
+                this.drawMiddle(this.getWidth() / 2, 200, g, "Joueur actuel: " + this.joueurActuel);
+                this.drawMiddle(this.getWidth() / 2, 375, g, this.resultatRoue);
+                Map<TextAttribute, Object> attributes = new HashMap<>();
+                attributes.put(TextAttribute.TRACKING, 0.5);
+                Font font2 = font.deriveFont(attributes);
+                g.setFont(font2);
+                this.drawMiddle(this.getWidth() / 2, this.getHeight() / 2, g, this.enigme);
+                g.setFont(font);
+                this.drawMiddle(this.getWidth() / 2, 30, g, "Enigme Normale");
+                g.setFont(new Font("Impact", Font.PLAIN, 48));
+                this.drawMiddle(this.getWidth() / 2, 90, g, "Theme: " + this.theme);
+            } else if (state == Panneau.FIN_ENIGME_NORMALE) {
+                font = new Font("Impact", Font.PLAIN, 48);
+                g.setFont(font);
+                g.setColor(Color.BLACK);
+                this.drawMiddle(this.getWidth() / 2, this.getHeight() / 2, g, "Fin de l'enigme normale !");
+                this.drawMiddle(this.getWidth() / 2, this.getHeight() / 2 + 50, g, this.gagnant + " gagne l'enigme normale !");
+            } else if (state == Panneau.END) {
+                g.setFont(font);
+                g.setColor(Color.BLACK);
+                String s = "Partie terminee";
+                this.drawMiddle(this.getWidth() / 2, this.getHeight() / 2 - 32, g, s);
+                this.drawMiddle(this.getWidth() / 2, this.getHeight() / 2 + 32, g, "Vainqueur: " + this.gagnant);
+            }
         }
     }
 

@@ -16,12 +16,8 @@ public class AppClient {
         client.setJoueur(joueur);
         FenetrePrincipal fenetrePrincipal = new FenetrePrincipal(joueur);
         client.setFenetrePrincipal(fenetrePrincipal);
-        try {
-            client.connectJoueur();
-            client.boucleReceptionMessage();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        fenetrePrincipal.repaint();
     }
+
 }
 

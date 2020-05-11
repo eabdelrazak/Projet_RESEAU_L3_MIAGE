@@ -12,15 +12,14 @@ import rouefortune.graphique.FenetrePrincipal;
 import rouefortune.graphique.Panneau;
 import rouefortune.graphique.PropositionTexte;
 
+import javax.swing.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class Client {
+public class Client implements Runnable {
 
     private Socket s;
     private Echange message;
@@ -28,21 +27,28 @@ public class Client {
     private FenetrePrincipal fenetrePrincipal;
     private boolean fermerFenetre = false;
 
+    private Thread clientThread;
+
     /**
      * Fonction permettant la connection d'un joueur au serveur.
      *
      * @throws IOException Il peut y avoir un problème
      */
-    public void connectJoueur() throws IOException {
+    public void connectJoueur(String ip, int port) throws IOException {
         //getting localhost ip
-        InetAddress ip = InetAddress.getByName("localhost");
+        //InetAddress ip = InetAddress.getByName("localhost");
         //establish the connection with server port 5056
-        this.s = new Socket(ip, 5056);
+        this.s = new Socket(ip, port);
+    }
+
+    @Override
+    public void run() {
+        this.boucleReceptionMessage();
     }
 
     public void boucleReceptionMessage() {
         try {
-            Scanner scn = new Scanner(System.in);
+            this.fenetrePrincipal.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
             // obtaining input and out streams
             DataInputStream dis = new DataInputStream(s.getInputStream());
             DataOutputStream dos = new DataOutputStream(s.getOutputStream());
@@ -276,4 +282,8 @@ public class Client {
         }
     }
 
+
+    public void setThread(Thread clientThread) {
+        this.clientThread = clientThread;
+    }
 }
