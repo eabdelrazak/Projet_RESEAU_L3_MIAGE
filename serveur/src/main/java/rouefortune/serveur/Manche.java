@@ -78,6 +78,7 @@ public class Manche {
     public void jouerEnigmeLongue() {
         this.setRandomEnigme();
         this.enigmeNormale = new EnigmeNormale(this.leTableau, this.serveur);
+        this.serveur.envoyerEnigme(this.leTableau, Messages.ENIGME_NORMALE);
     }
 
     private void setRandomEnigme() {
@@ -93,12 +94,14 @@ public class Manche {
         for(int i=0; i<this.serveur.getClientHandlers().size(); i++){
             if(this.serveur.getClientHandlers().get(i) == joueurActuel){
                 if(i < this.serveur.getClientHandlers().size()-1) {
-                    joueurActuel = this.serveur.getClientHandlers().get(i + 1);
+                    this.setJoueurActuel(this.serveur.getClientHandlers().get(i + 1));
                 }else{
-                    joueurActuel = this.serveur.getClientHandlers().get(0);
+                    this.setJoueurActuel(this.serveur.getClientHandlers().get(0));
                 }
+                break;
             }
         }
+
     }
 
     public String tournerRoue(){

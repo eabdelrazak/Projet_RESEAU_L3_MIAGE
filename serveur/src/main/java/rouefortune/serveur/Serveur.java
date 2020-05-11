@@ -164,6 +164,23 @@ public class Serveur {
 
     }
 
+    public void terminerEnigmeNormale(ClientHandler gagnant) {
+        System.out.println(gagnant.getInventaire().getNomJoueur()+" a trouvée le mot !!");
+        for(ClientHandler client : clientHandlers){
+            try {
+                client.getDos().writeUTF(creerMessageJsonObject(Messages.MOT_TROUVEE, "normale;"+gagnant.getInventaire().getNomJoueur()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        this.partie.prochaineManche();
+    }
+
     public void envoyerEnigme(TableauAffichage tableau, String typeEnigme) {
 
         for (ClientHandler client : clientHandlers) {
@@ -303,5 +320,34 @@ public class Serveur {
 
     public void setInfiniteLoop(boolean infiniteLoop) {
         this.infiniteLoop = infiniteLoop;
+    }
+
+    public void annoncerGagnant() {
+        String gagnant = this.getGagnant().getInventaire().getNomJoueur();
+        for (ClientHandler client : clientHandlers) {
+            try {
+                String message = creerMessageJsonObject(Messages.ANNONCE_GAGNANT, gagnant);
+                client.getDos().writeUTF(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        this.mettreFinJeu();
+        this.deconnecterAll();
+    }
+
+    private ClientHandler getGagnant() {
+        ClientHandler c = this.clientHandlers.get(0);
+        for (ClientHandler client : clientHandlers) {
+            if(client.getInventaire().getCagnotePartie() > c.getInventaire().getCagnotePartie()){
+                c = client;
+            }
+        }
+        return c;
     }
 }

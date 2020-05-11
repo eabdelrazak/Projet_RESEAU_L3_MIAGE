@@ -10,6 +10,7 @@ import rouefortune.Echange;
 import rouefortune.Messages;
 import rouefortune.graphique.FenetrePrincipal;
 import rouefortune.graphique.Panneau;
+import rouefortune.graphique.PropositionTexte;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Client {
 
@@ -91,6 +93,7 @@ public class Client {
                         break;
                     case Messages.FAIRE_PROPOSITION:
                         this.fenetrePrincipal.pan.buzzer.setVisible(false);
+                        this.fenetrePrincipal.pan.textfield.state = PropositionTexte.ENIGME_RAPIDE;
                         this.fenetrePrincipal.pan.textfield.setVisible(true);
                         break;
                     case Messages.MOT_TROUVEE:
@@ -105,22 +108,53 @@ public class Client {
                             this.fenetrePrincipal.pan.enigme = "";
                             this.fenetrePrincipal.repaint();
                         }else if(this.message.getContenu().split(";")[0].equals("normale")){
-
+                            if (this.message.getContenu().split(";")[1].equals(this.joueur.getNomJoueur())) {
+                                joueur.addCagnottePartie(joueur.getCagnotteManche());
+                                joueur.setCagnotteManche(0);
+                            }else{
+                                joueur.setCagnotteManche(0);
+                            }
+                            this.fenetrePrincipal.pan.lettrefield.setVisible(false);
+                            this.fenetrePrincipal.pan.textfield.setVisible(false);
+                            this.fenetrePrincipal.pan.disableButtons();
+                            this.fenetrePrincipal.pan.gagnant = this.message.getContenu().split(";")[1];
+                            this.fenetrePrincipal.setPanState(Panneau.FIN_ENIGME_NORMALE);
+                            this.fenetrePrincipal.pan.theme = "";
+                            this.fenetrePrincipal.pan.enigme = "";
+                            this.fenetrePrincipal.repaint();
                         }
                         break;
                     case Messages.CORRECT_LETTRE:
                         joueur.addCagnotteManche(joueur.getBonus(),Integer.parseInt(this.message.getContenu().split(";")[1]));
+                        this.fenetrePrincipal.pan.resultatRoue = "La lettre est "+this.message.getContenu().split(";")[1]+" fois dans le mot";
+                        this.fenetrePrincipal.repaint();
+                        this.fenetrePrincipal.pan.lettrefield.setVisible(false);
+                        this.fenetrePrincipal.pan.enableButtons();
+                        break;
+                    case Messages.INCORECT_LETTRE:
+                        this.fenetrePrincipal.pan.resultatRoue = "La lettre n'est pas dans le mot";
+                        this.fenetrePrincipal.repaint();
+                        this.fenetrePrincipal.pan.lettrefield.setVisible(false);
                         break;
                     case Messages.RESULTAT_ROUE:
                         System.out.println("En tournant la roue, vous avez eu : " + this.message.getContenu());
+                        String message = "Résultat de la roue: ";
                         if (this.message.getContenu().equals("Banqueroute")) {
                             joueur.setBonus(0);
                             joueur.setCagnotteManche(0);
+                            message += "Banqueroute";
                         } else if (this.message.getContenu().equals("Passe")) {
-                            //Afficher dans IHM que le joueur passe son tour.
+                            message += "Passe";
                         } else {
                             joueur.setBonus(Integer.parseInt(this.message.getContenu()));
+                            message += Integer.parseInt(this.message.getContenu())+"€";
+
+                            this.fenetrePrincipal.pan.lettrefield.setVisible(true);
+                            this.fenetrePrincipal.pan.disableButtons();
+
                         }
+                        this.fenetrePrincipal.pan.resultatRoue = message;
+                        this.fenetrePrincipal.repaint();
                         break;
                     case Messages.REPRENDRE:
                         this.fenetrePrincipal.pan.buzzer.setVisible(true);
@@ -133,17 +167,26 @@ public class Client {
                     case Messages.DISCONNECT:
                         System.out.println("Connection closed");
                         this.s.close();
-                        System.exit(0);
-                        //Runtime.getRuntime().exit(0);
                         disconnect = true;
+                        System.exit(0);
                         break;
                     case Messages.JOUEUR_ACTUEL:
                         this.fenetrePrincipal.pan.joueurActuel = this.message.getContenu();
                         if(this.message.getContenu().equals(this.joueur.getNomJoueur())){
-                            this.fenetrePrincipal.pan.tournerroue.setVisible(true);
+                            this.fenetrePrincipal.pan.enableButtons();
                         }else{
-                            this.fenetrePrincipal.pan.tournerroue.setVisible(false);
+                            this.fenetrePrincipal.pan.disableButtons();
+                            this.fenetrePrincipal.pan.textfield.setVisible(false);
                         }
+                        break;
+                    case Messages.ANNONCE_GAGNANT:
+                        this.fenetrePrincipal.pan.setState(Panneau.END);
+                        this.fenetrePrincipal.pan.gagnant = this.message.getContenu();
+                        this.fenetrePrincipal.repaint();
+                        TimeUnit.SECONDS.sleep(5);
+                        this.s.close();
+                        disconnect = true;
+                        System.exit(0);
                         break;
                     default:
                 }
@@ -215,6 +258,22 @@ public class Client {
         }
     }
 
+    public void sendRoue(){
+        try {
+            DataOutputStream dos = new DataOutputStream(this.s.getOutputStream());
+            dos.writeUTF(this.creerMessageJsonObject(Messages.TOURNER_ROUE, null));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 
+    public void sendPropositionLettre(String s) {
+        try {
+            DataOutputStream dos = new DataOutputStream(this.s.getOutputStream());
+            dos.writeUTF(this.creerMessageJsonObject(Messages.PROPOSER_LETTRE, s));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 
 }

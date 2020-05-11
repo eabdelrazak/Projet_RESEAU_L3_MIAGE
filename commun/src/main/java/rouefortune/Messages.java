@@ -19,8 +19,6 @@ public class Messages {
     //Le serveur dit au client qu'il peut se déconnecter
     public static final String DISCONNECT = "serveurdisconnect";
     // Le serveur demande une proposition
-    public static final String PROPOSER_REPONSE="serveurproposerreponse";
-    // Le serveur demande une proposition
     public static final String BEGIN = "serveurdebut";
     // Le serveur notifie les joueurs que le mot à été trouvé et donne le gagnant
     public static final String MOT_TROUVEE = "serveurvainqueur";
@@ -36,6 +34,8 @@ public class Messages {
     public static final String RESULTAT_ROUE="serveurresultatroue";
     //Le serveur indique quel joueur joue
     public static final String JOUEUR_ACTUEL="serveurjoueuractuel";
+    //le serveur annonce le gagnant
+    public static final String ANNONCE_GAGNANT="serveurannoncergagner";
 
     /* MESSAGE CLIENT → SERVEUR */
     // Le client buzz
@@ -48,6 +48,8 @@ public class Messages {
     public static final String PROPOSER_LETTRE="clientproposerconsonne";
     // Le client souhaite quitter le jeu
     public static final String QUITTER="clientquitte";
+    // Le client fait une proposition
+    public static final String PROPOSER_REPONSE="clientproposerreponse";
 
     public static final String NOM = "clientnomduclient";
 }

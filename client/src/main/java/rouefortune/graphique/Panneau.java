@@ -11,20 +11,26 @@ import java.util.Map;
 public class Panneau extends JPanel {
 
     public static final int CONNEXION = 0;
+    public static final int FAILURE = -1;
+    public static final int CONNECTED = 1;
     public static final int ENIGME_RAPIDE = 11;
     public static final int FIN_ENIGME_RAPIDE = 12;
     public static final int ENIGME_NORMALE = 21;
-    public static final int FAILURE = -1;
-    public static final int CONNECTED = 1;
+    public static final int FIN_ENIGME_NORMALE = 22;
+    public static final int END = -2;
+
 
     public String enigme = "";
     public Joueur joueur;
     public Buzzer buzzer, tournerroue;
     public int state = Panneau.CONNEXION;
     public String theme = "";
-    public PropositionTexte textfield;
+    public PropositionTexte textfield, lettrefield;
     public String gagnant = "";
     public String joueurActuel = "";
+    public String resultatRoue = "";
+    public Guesser guesser;
+    public Buyer buyer;
 
     public void init(Joueur joueur)  {
         this.joueur = joueur;
@@ -36,9 +42,21 @@ public class Panneau extends JPanel {
         this.tournerroue.setVisible(false);
         this.add(tournerroue);
 
-        this.textfield = new PropositionTexte(joueur);
+        this.guesser = new Guesser("Guess", joueur, this);
+        this.guesser.setVisible(false);
+        this.add(guesser);
+
+        this.buyer = new Buyer("Achat", joueur, this);
+        this.buyer.setVisible(false);
+        this.add(buyer);
+
+        this.textfield = new PropositionTexte(joueur, PropositionTexte.ENIGME_RAPIDE, this);
         this.textfield.setVisible(false);
         this.add(textfield);
+
+        this.lettrefield = new PropositionTexte(joueur, PropositionTexte.ENIGME_NORMALE, this);
+        this.lettrefield.setVisible(false);
+        this.add(lettrefield);
     }
 
     @Override
@@ -89,6 +107,7 @@ public class Panneau extends JPanel {
             g.setFont(pseudoFont);
             g.setColor(Color.BLACK);
             this.drawMiddle(this.getWidth()/2, 200, g, "Joueur actuel: "+this.joueurActuel);
+            this.drawMiddle(this.getWidth()/2, 375, g, this.resultatRoue);
             Map<TextAttribute, Object> attributes = new HashMap<>();
             attributes.put(TextAttribute.TRACKING, 0.5);
             Font font2 = font.deriveFont(attributes);
@@ -98,6 +117,18 @@ public class Panneau extends JPanel {
             this.drawMiddle(this.getWidth()/2, 30, g, "Enigme Normale");
             g.setFont(new Font("Impact", Font.PLAIN, 48));
             this.drawMiddle(this.getWidth()/2, 90, g, "Theme: "+this.theme);
+        }else if(state == Panneau.FIN_ENIGME_NORMALE){
+            font = new Font("Impact", Font.PLAIN, 48);
+            g.setFont(font);
+            g.setColor(Color.BLACK);
+            this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, "Fin de l'enigme normale !");
+            this.drawMiddle(this.getWidth()/2, this.getHeight()/2+50, g, this.gagnant+" gagne l'enigme normale !");
+        }else if(state == Panneau.END){
+            g.setFont(font);
+            g.setColor(Color.BLACK);
+            String s = "Partie terminee";
+            this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, s);
+            this.drawMiddle(this.getWidth()/2, this.getHeight()/2+40, g, "Vainqueur: "+this.gagnant);
         }
     }
 
@@ -115,5 +146,19 @@ public class Panneau extends JPanel {
 
     public int getState() {
         return state;
+    }
+
+    public void disableButtons() {
+        this.tournerroue.setVisible(false);
+        this.buyer.setVisible(false);
+        this.guesser.setVisible(false);
+    }
+
+    public void enableButtons(){
+        this.tournerroue.setVisible(true);
+        if(this.joueur.getCagnotteManche() >= 200) {
+            this.buyer.setVisible(true);
+        }
+        this.guesser.setVisible(true);
     }
 }

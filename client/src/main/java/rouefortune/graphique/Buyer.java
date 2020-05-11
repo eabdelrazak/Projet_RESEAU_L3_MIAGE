@@ -4,33 +4,28 @@ import rouefortune.joueur.Joueur;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.Objects;
 
-public class Buzzer extends JButton implements MouseListener {
+public class Buyer extends JButton implements MouseListener {
     private Joueur joueur;
+    private Panneau panneau;
     private String name;
     private Image currImg, img, imgEntered, imgPressed;
 
-    public static final int ENIGME_RAPIDE = 0;
-    public static final int ENIGME_NORMALE = 1;
-
-    public final int state;
-
-    public Buzzer(String str, Joueur joueur, int state){
+    public Buyer(String str, Joueur joueur, Panneau panneau){
         super(str);
+        this.panneau = panneau;
         this.joueur = joueur;
         this.name = str;
-        this.state = state;
-        this.setBounds(350, 400, 100, 100);
+        this.setBounds(225, 400, 100, 100);
         try {
-            img = ImageIO.read(Objects.requireNonNull(Buzzer.class.getClassLoader().getResourceAsStream("buzzerSelected.png")));
-            imgEntered = ImageIO.read(Objects.requireNonNull(Buzzer.class.getClassLoader().getResourceAsStream("buzzer.png")));
-            imgPressed = ImageIO.read(Objects.requireNonNull(Buzzer.class.getClassLoader().getResourceAsStream("buzzerPressed.png")));
+            img = ImageIO.read(Objects.requireNonNull(Buyer.class.getClassLoader().getResourceAsStream("buzzerSelected.png")));
+            imgEntered = ImageIO.read(Objects.requireNonNull(Buyer.class.getClassLoader().getResourceAsStream("buzzer.png")));
+            imgPressed = ImageIO.read(Objects.requireNonNull(Buyer.class.getClassLoader().getResourceAsStream("buzzerPressed.png")));
             currImg = img;
         } catch (IOException e){
             e.printStackTrace();
@@ -48,18 +43,14 @@ public class Buzzer extends JButton implements MouseListener {
         g2d.drawImage(currImg, 0, 0, this.getWidth(), this.getHeight(), this);
         g2d.setColor(Color.WHITE);
         g2d.setFont(new Font("Impact", Font.PLAIN, 35));
-        g2d.drawString(this.name, this.getWidth() / 2 - (this.getWidth() / 2)+20, (this.getHeight() /2)+12);
+        g2d.drawString(this.name, this.getWidth() / 2 - (this.getWidth() / 2)+15, (this.getHeight() /2)+12);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(state == Buzzer.ENIGME_RAPIDE) {
-            this.joueur.getClient().sendBuzz();
-        }else if(state == Buzzer.ENIGME_NORMALE){
-            this.joueur.getClient().sendRoue();
-        }
-        //System.out.println("BUZZ");
-        //this.joueur.proposer();
+        this.panneau.disableButtons();
+        this.panneau.textfield.state = PropositionTexte.ENIGME_NORMALE_BUYER;
+        this.panneau.textfield.setVisible(true);
     }
 
     @Override

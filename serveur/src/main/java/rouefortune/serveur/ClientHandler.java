@@ -44,6 +44,7 @@ public class ClientHandler implements Runnable {
                 }
                 Echange messageReceived = receptionMessage(dis.readUTF());
                 //received = messageReceived.g
+                System.out.println(messageReceived.getMessage()+"/"+messageReceived.getContenu());
 
                 switch (messageReceived.getMessage()) {
                     case Messages.NOM:
@@ -57,50 +58,69 @@ public class ClientHandler implements Runnable {
                         //dos.writeUTF(creerMessageJsonObject(Messages.PROPOSER_REPONSE,null));
                         break;
                     case Messages.PROPOSER_REPONSE:
-                        if(messageReceived.getContenu().equalsIgnoreCase(this.getInventaire().getMotADeviner())){
-                            this.serveur.terminerEnigmeRapide(this);
-                            this.getInventaire().addCagnoteManche(1,500);
-                        }else{
-                            this.serveur.getPartie().getLaManche().repriseEnigmeRapide();
+                        String type = messageReceived.getContenu().split(";")[0];
+                        String contenu = messageReceived.getContenu().split(";")[1];
+                        if(type.equals("rapide")) {
+                            if (contenu.equalsIgnoreCase(this.getInventaire().getMotADeviner())) {
+                                this.serveur.terminerEnigmeRapide(this);
+                                this.getInventaire().addCagnoteManche(1, 500);
+                            } else {
+                                this.serveur.getPartie().getLaManche().repriseEnigmeRapide();
+                            }
+                        }else if(type.equals("normale")){
+                            if (contenu.equalsIgnoreCase(this.getInventaire().getMotADeviner())) {
+                                this.getInventaire().addCagnotePartie(this.getInventaire().getCagnotePartie());
+                                this.getInventaire().setCagnoteManche(0);
+                                this.serveur.terminerEnigmeNormale(this);
+                            } else {
+                                this.serveur.getPartie().getLaManche().passerLaMain();
+                            }
                         }
                         break;
                     case Messages.PROPOSER_LETTRE:
-                        if(messageReceived.getMessage().length() == 1){
-                            String laLettre = messageReceived.getMessage();
-                            if(!(laLettre.charAt(0) != 'a' && laLettre.charAt(0) != 'i' && laLettre.charAt(0) != 'u' && laLettre.charAt(0) != 'e' && laLettre.charAt(0) != 'o' && laLettre.charAt(0) != 'y')){
+                        if(messageReceived.getContenu().length() == 1){
+                            String laLettre = messageReceived.getContenu();
+                            System.out.println("Lettre proposé: "+laLettre);
+                            if(!(laLettre.charAt(0) == 'a' || laLettre.charAt(0) == 'i' || laLettre.charAt(0) == 'u' || laLettre.charAt(0) == 'e' || laLettre.charAt(0) == 'o' || laLettre.charAt(0) == 'y')){
                                 if(this.serveur.getPartie().getLaManche().getLeTableau().presenceLettre(laLettre.charAt(0))){
                                     int nombreTrouver = this.serveur.getPartie().getLaManche().getLeTableau().chercherLettre(laLettre.charAt(0));
+                                    System.out.println("La consonne est dans l'enigme");
                                     dos.writeUTF(creerMessageJsonObject(Messages.CORRECT_LETTRE, "normale;"+nombreTrouver));
                                     this.inventaire.addCagnoteManche(this.inventaire.getBonus(), nombreTrouver);
                                 }else{
+                                    this.serveur.getPartie().getLaManche().passerLaMain();
+                                    System.out.println("La consonne n'est pas dans l'enigme");
                                     dos.writeUTF(creerMessageJsonObject(Messages.INCORECT_LETTRE,"Lettre incorrecte ou deja deviner"));
                                 }
                             }else{
                                 if(this.inventaire.getCagnoteManche() >= 200){
                                     if(this.serveur.getPartie().getLaManche().getLeTableau().presenceLettre(laLettre.charAt(0))){
-                                        this.inventaire.addCagnoteManche(1, -200);
                                         int nombreTrouver = this.serveur.getPartie().getLaManche().getLeTableau().chercherLettre(laLettre.charAt(0));
+                                        System.out.println("La voyelle est dans l'enigme");
                                         dos.writeUTF(creerMessageJsonObject(Messages.CORRECT_LETTRE, "normale;"+nombreTrouver));
-                                        this.inventaire.addCagnoteManche(this.inventaire.getBonus(), nombreTrouver);
                                     }else{
+                                        this.serveur.getPartie().getLaManche().passerLaMain();
+                                        System.out.println("La voyelle n'est pas dans l'enigme");
                                         dos.writeUTF(creerMessageJsonObject(Messages.INCORECT_LETTRE,"Lettre incorrecte ou deja deviner"));
                                     }
+                                    this.inventaire.addCagnoteManche(1, -200);
                                 }
                             }
                         }else{
                             dos.writeUTF(creerMessageJsonObject(Messages.REFUSER_LETTRE,"Vous devez envoyer une lettre"));
                         }
+                        this.serveur.envoyerEnigme(this.serveur.getPartie().getLaManche().getLeTableau(), Messages.ENIGME_NORMALE);
                         break;
                     case Messages.TOURNER_ROUE:
                         String resultatRoue = this.serveur.getPartie().getLaManche().tournerRoue();
                         if(resultatRoue.equals("Banqueroute")){
                             this.inventaire.setBonus(0);
                             this.inventaire.setCagnoteManche(0);
-                            this.serveur.getPartie().getLaManche().passerLaMain();
                             dos.writeUTF(creerMessageJsonObject(Messages.RESULTAT_ROUE,resultatRoue));
+                            this.serveur.getPartie().getLaManche().passerLaMain();
                         }else if(resultatRoue.equals("Passe")){
-                            this.serveur.getPartie().getLaManche().passerLaMain();
                             dos.writeUTF(creerMessageJsonObject(Messages.RESULTAT_ROUE,resultatRoue));
+                            this.serveur.getPartie().getLaManche().passerLaMain();
                         }else{
                             this.inventaire.setBonus(Integer.parseInt(resultatRoue));
                             dos.writeUTF(creerMessageJsonObject(Messages.RESULTAT_ROUE,resultatRoue));
