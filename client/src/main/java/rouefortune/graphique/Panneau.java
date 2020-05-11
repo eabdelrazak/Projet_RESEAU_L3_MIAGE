@@ -127,8 +127,8 @@ public class Panneau extends JPanel {
             g.setFont(font);
             g.setColor(Color.BLACK);
             String s = "Partie terminee";
-            this.drawMiddle(this.getWidth()/2, this.getHeight()/2, g, s);
-            this.drawMiddle(this.getWidth()/2, this.getHeight()/2+40, g, "Vainqueur: "+this.gagnant);
+            this.drawMiddle(this.getWidth()/2, this.getHeight()/2-32, g, s);
+            this.drawMiddle(this.getWidth()/2, this.getHeight()/2+32, g, "Vainqueur: "+this.gagnant);
         }
     }
 
